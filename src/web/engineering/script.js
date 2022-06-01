@@ -879,3 +879,34 @@ function helpButtonOnClick(e) {
     classList.add('hidden')
   }
 }
+
+function LEDButtonOnClick(e) {
+  let pane = el('helpPane')
+  let classList = pane.classList
+  if (classList.contains('hidden')) {
+    classList.remove('hidden')
+
+    // Put it in the center of the display
+    style = window.getComputedStyle(pane, null)
+    x = (document.body.clientWidth - parseInt(style.width, 10)) / 2.0
+    y = (document.body.clientHeight - parseInt(style.height, 10)) / 2.0
+    pane.style.left = x + 'px'
+    pane.style.top = y + 'px'
+  }
+  else {classList.add('hidden')} LEDSwitch.setOn(true)
+  return
+}
+
+function LEDButtoffOnClick(e) {
+  LEDSwitch.setOn(false)
+  return
+}
+
+class LEDSwitch {
+  static #on = false
+
+      static setOn(_on) {
+    LEDSwitch.on = _on
+    el("LEDSwitch").textContent = _on ? "🟢" : "❌"
+  }
+}
