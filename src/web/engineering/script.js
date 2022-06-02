@@ -395,6 +395,7 @@ class PIDGains {
       }
 
       let engineering_command = {
+        LED_on : LEDSwitch.setOn(),
         botId : getSelectedBotId(),
         pid_control : pid_control
       }
@@ -493,6 +494,19 @@ window.onblur = function() {
 }
 
 DeadMansSwitch.setOn(false)
+
+////////// LED code //////////
+let LEDSwitchON = false
+
+function LEDButtonOnClick(e) {
+  LEDSwitchON = true
+  return
+}
+
+function LEDButtoffOnClick(e) {
+  LEDSwitchON = false
+  return
+}
 
 ////////// Setup hotkeys /////////
 
@@ -702,6 +716,7 @@ function getVisibleCommand() {
   }
 
   let engineering_command = {
+    LED_on : LEDSwitchON,
     botId : getSelectedBotId(),
     pid_control : pid_control
   }
@@ -877,50 +892,5 @@ function helpButtonOnClick(e) {
   }
   else {
     classList.add('hidden')
-  }
-}
-
-function LEDButtonOnClick(e) {
-  let pane = el('helpPane')
-  let classList = pane.classList
-  if (classList.contains('hidden')) {
-    classList.remove('hidden')
-
-    // Put it in the center of the display
-    style = window.getComputedStyle(pane, null)
-    x = (document.body.clientWidth - parseInt(style.width, 10)) / 2.0
-    y = (document.body.clientHeight - parseInt(style.height, 10)) / 2.0
-    pane.style.left = x + 'px'
-    pane.style.top = y + 'px'
-  }
-  else {classList.add('hidden')} LEDSwitch.setOn(true)
-  return
-}
-
-function LEDButtoffOnClick(e) {
-  LEDSwitch.setOn(false)
-  return
-}
-
-class LEDSwitch {
-  static #on = false
-
-      static setOn(_on) {
-    LEDSwitch.on = _on
-    let pane = el('helpPane')
-    let classList = pane.classList
-    if (LEDSwitch.on = _on) {
-      classList.remove('hidden')
-
-      // Put it in the center of the display
-      style = window.getComputedStyle(pane, null)
-      x = (document.body.clientWidth - parseInt(style.width, 10)) / 2.0
-      y = (document.body.clientHeight - parseInt(style.height, 10)) / 2.0
-      pane.style.left = x + 'px'
-      pane.style.top = y + 'px'
-    }
-    else {
-      classList.add('hidden')
-    }
   }
 }

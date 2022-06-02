@@ -26,6 +26,7 @@ constexpr int STBD_ELEVATOR_PIN = 2;
 constexpr int RUDDER_PIN = 3;
 constexpr int PORT_ELEVATOR_PIN = 4;
 constexpr int MOTOR_PIN = 6;
+const int LED_PIN = 10;
 
 // The timeout
 unsigned long t_last_command = 0;
@@ -109,6 +110,8 @@ void setup()
 
   delay(100);
 
+  pinMode(LED_PIN, OUTPUT);
+
   motor_servo.attach(MOTOR_PIN);
   rudder_servo.attach(RUDDER_PIN);
   stbd_elevator_servo.attach(STBD_ELEVATOR_PIN);
@@ -176,6 +179,14 @@ void loop()
             stbd_elevator_servo.writeMicroseconds(command.stbd_elevator);
             port_elevator_servo.writeMicroseconds(command.port_elevator);
 
+            if (command.LED_on == true){
+              digitalWrite(LED_PIN, HIGH);
+            }
+            else if (command.LED_on == false){
+              digitalWrite(LED_PIN, LOW);
+            }
+            
+
             // Set the timeout vars
             t_last_command = millis();
             command_timeout = command.timeout * 1000;
@@ -225,9 +236,10 @@ void halt_all() {
   const int rudder_off = rudder_neutral;
   const int stbd_elevator_off = stbd_elevator_neutral;
   const int port_elevator_off = port_elevator_neutral;
+  
 }
 
 // from feather.pb.c - would be better to just add the file to the sketch
 // but unclear how to do some from Arduino
-PB_BIND(jaiabot_protobuf_ArduinoCommand, jaiabot_protobuf_ArduinoCommand, 2)
+PB_BIND(jaiabot_protobuf_ArduinoCommand, jaiabot_protobuf_Arduino, 2)
 PB_BIND(jaiabot_protobuf_ArduinoResponse, jaiabot_protobuf_ArduinoResponse, 2)

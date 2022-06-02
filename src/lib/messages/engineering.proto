@@ -76,6 +76,8 @@ message Engineering
 
     optional bool engineering_messages_enabled = 13;
 
+    optional bool LED_on = 14;
+
     // For User flagging of events
     optional uint32 flag = 100 [(dccl.field) = { min: 0 max: 1024 }];
 }
