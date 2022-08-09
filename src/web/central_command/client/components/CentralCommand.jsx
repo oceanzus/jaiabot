@@ -687,7 +687,7 @@ export default class CentralCommand extends React.Component {
 			'drawend',
 			(evt) => {
 				console.log('DRAWING ENDED...');
-				OlUnobserveByKey(surveyPolygonlistener);
+
 				// console.log(evt.feature.getGeometry());
 				let geo_geom = evt.feature.getGeometry();
 				geo_geom.transform("EPSG:3857", "EPSG:4326")
@@ -699,6 +699,7 @@ export default class CentralCommand extends React.Component {
 					surveyPolygonCoords: geo_geom,
 					surveyPolygonChanged: true})
 				this.updateMissionLayer();
+				OlUnobserveByKey(surveyPolygonlistener);
 				//this.generateMissions(surveyPolygonGeoCoords);
 				// console.log(geom);
 				// this.setState({ surveyPolgyonActive: false, surveyPolygonFeature: null });
