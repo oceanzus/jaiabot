@@ -1447,7 +1447,7 @@ export default class CentralCommand extends React.Component {
 		// Add mission generation form to UI if the survey polygon has changed.
 		let missionSettingsPanel = '';
 		if (this.state.surveyPolygonChanged) {
-			missionSettingsPanel = <MissionSettingsPanel mission_params={this.state.missionParams} goal={this.state.missionBaseGoal} onClose={() => { this.state.surveyPolygonChanged = false }} onMissionApply={() => { this.genMission(this.state.surveyPolygonGeoCoords) }} />
+			missionSettingsPanel = <MissionSettingsPanel mission_params={this.state.missionParams} goal={this.state.missionBaseGoal} onClose={() => { this.state.surveyPolygonChanged = true }} onMissionApply={() => { this.genMission(this.state.surveyPolygonGeoCoords) }} />
 			// missionSettingsPanel = <MissionSettingsPanel mission_params={this.state.missionParams} onChange={() => {this.generateMissions(this.state.surveyPolygonGeoCoords)}} onClose={() => { this.state.surveyPolygonChanged = false }} />
 		}
 
