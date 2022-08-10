@@ -255,7 +255,8 @@ export default class CentralCommand extends React.Component {
 			surveyPolygonActive: false,
 			surveyPolygonGeoCoords: null,
 			surveyPolygonCoords: null,
-			surveyPolygonChanged: false
+			surveyPolygonChanged: false,
+			selectedFeatures: null
 		};
 
 		this.missionPlanMarkers = new Map();
@@ -590,7 +591,7 @@ export default class CentralCommand extends React.Component {
 		this.surveyPolygonInteraction.on(
 			'drawstart',
 			(evt) => {
-				this.setState({surveyPolygonChanged: true });
+				this.setState({surveyPolygonChanged: true, mode: '' });
 
 				surveyPolygonlistener = evt.feature.on('change', (evt2) => {
 					console.log('testing survey polygon change');
@@ -689,6 +690,8 @@ export default class CentralCommand extends React.Component {
 			'drawend',
 			(evt) => {
 				console.log('DRAWING ENDED...');
+
+				this.setState({mode: 'missionPlanning'});
 
 				// console.log(evt.feature.getGeometry());
 				let geo_geom = evt.feature.getGeometry();
@@ -2047,18 +2050,14 @@ export default class CentralCommand extends React.Component {
 	// SelectInteraction
 
 	selectInteraction() {
-		return new SelectInteraction({
-			handleEvent: this.handleEvent.bind(this),
-			stopDown: this.stopDown.bind(this)
-		})
+		return new SelectInteraction()
 	}
 
 	// TranslateInteraction
 
 	translateInteraction() {
 		return new TranslateInteraction({
-			handleEvent: this.handleEvent.bind(this),
-			stopDown: this.stopDown.bind(this)
+			features: this.state.selectedFeatures
 		})
 	}
 
@@ -2088,8 +2087,6 @@ export default class CentralCommand extends React.Component {
 			return false // Not a drag event
 		}
 
-
-
 		const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
 			return feature
 		});
@@ -2108,6 +2105,13 @@ export default class CentralCommand extends React.Component {
 			}
 			else {
 				this.selectBots([feature.getId()])
+			}
+
+			// Clicked on mission planning point
+			if (feature.goal === null) {
+				if (this.state.mode === 'missionPlanning') {
+					this.state.selectedFeatures = feature;
+				}
 			}
 		}
 		else {
