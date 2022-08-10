@@ -27,6 +27,8 @@ import * as turf from '@turf/turf';
 // Openlayers
 import OlMap from 'ol/Map';
 import {
+	Select as SelectInteraction,
+	Translate as TranslateInteraction,
 	Pointer as PointerInteraction,
 	defaults as defaultInteractions,
   } from 'ol/interaction';
@@ -368,7 +370,7 @@ export default class CentralCommand extends React.Component {
 		});
 
 		map = new OlMap({
-			interactions: defaultInteractions().extend([this.pointerInteraction()]),
+			interactions: defaultInteractions().extend([this.pointerInteraction(), this.selectInteraction(), this.translateInteraction()]),
 			layers: this.createLayers(),
 			controls: [
 				new OlZoom(),
@@ -1557,10 +1559,6 @@ export default class CentralCommand extends React.Component {
 
 					{surveyPolygonActive ? (
 						<div>
-							<div id="surveyPolygonResults">
-								<div id="surveyPolygonResultArea"></div>
-								<div id="surveyPolygonResultPerimeter"></div>
-							</div>
 							<button
 								type="button"
 								className="active"
@@ -2044,6 +2042,24 @@ export default class CentralCommand extends React.Component {
 		}
 
 		return botIds
+	}
+
+	// SelectInteraction
+
+	selectInteraction() {
+		return new SelectInteraction({
+			handleEvent: this.handleEvent.bind(this),
+			stopDown: this.stopDown.bind(this)
+		})
+	}
+
+	// TranslateInteraction
+
+	translateInteraction() {
+		return new TranslateInteraction({
+			handleEvent: this.handleEvent.bind(this),
+			stopDown: this.stopDown.bind(this)
+		})
 	}
 
 	// PointerInteraction
