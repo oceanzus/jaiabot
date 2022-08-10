@@ -591,7 +591,7 @@ export default class CentralCommand extends React.Component {
 		this.surveyPolygonInteraction.on(
 			'drawstart',
 			(evt) => {
-				this.setState({surveyPolygonChanged: true, mode: '' });
+				this.setState({surveyPolygonChanged: true, mode: 'missionPlanning' });
 
 				surveyPolygonlistener = evt.feature.on('change', (evt2) => {
 					console.log('testing survey polygon change');
