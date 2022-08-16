@@ -24,6 +24,14 @@ import { mdiDelete, mdiPlay, mdiFolderOpen, mdiContentSave, mdiLanDisconnect } f
 // TurfJS
 import * as turf from '@turf/turf';
 
+// ThreeJS
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+// IndexedDB
+import idb from 'idb';
+
 // Openlayers
 import OlMap from 'ol/Map';
 import {
@@ -31,7 +39,7 @@ import {
 	Translate as TranslateInteraction,
 	Pointer as PointerInteraction,
 	defaults as defaultInteractions,
-  } from 'ol/interaction';
+} from 'ol/interaction';
 import OlView from 'ol/View';
 import OlIcon from 'ol/style/Icon'
 import OlLayerGroup from 'ol/layer/Group';
@@ -771,6 +779,128 @@ export default class CentralCommand extends React.Component {
 	}
 
 	componentDidMount() {
+
+		console.log("OrbitControls", OrbitControls);
+
+		const backgroundColor = 0x000000;
+
+		/*////////////////////////////////////////*/
+
+		var renderCalls = [];
+		function render() {
+			requestAnimationFrame(render);
+			renderCalls.forEach((callback) => {
+				callback();
+			});
+		}
+		render();
+
+		/*////////////////////////////////////////*/
+
+		var scene = new THREE.Scene();
+
+		var camera = new THREE.PerspectiveCamera(
+			80,
+			window.innerWidth*0.1 / window.innerHeight*0.1,
+			0.1,
+			800
+		);
+		camera.position.set(5, 5, 5);
+
+		var renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.setSize(window.innerWidth*0.1, window.innerHeight*0.1);
+		renderer.setClearColor(backgroundColor); //0x );
+
+		renderer.toneMapping = THREE.LinearToneMapping;
+		renderer.toneMappingExposure = Math.pow(0.94, 5.0);
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.type = THREE.PCFShadowMap;
+
+		window.addEventListener(
+			"resize",
+			function () {
+				camera.aspect = window.innerWidth*0.1 / window.innerHeight*0.1;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth*0.1, window.innerHeight*0.1);
+			},
+			false
+		);
+
+		document.getElementById('jaiabot3d').appendChild(renderer.domElement);
+
+		function renderScene() {
+			renderer.render(scene, camera);
+		}
+		renderCalls.push(renderScene);
+
+		/* ////////////////////////////////////////////////////////////////////////// */
+
+		var controls = new OrbitControls(camera, renderer.domElement);
+		controls.rotateSpeed = 0.3;
+		controls.zoomSpeed = 0.9;
+
+		controls.minDistance = 3;
+		controls.maxDistance = 20;
+
+		controls.minPolarAngle = 0; // radians
+		controls.maxPolarAngle = Math.PI / 2; // radians
+
+		controls.enableDamping = true;
+		controls.dampingFactor = 0.05;
+
+		renderCalls.push(function () {
+			controls.update();
+		});
+
+		/* ////////////////////////////////////////////////////////////////////////// */
+
+		var light = new THREE.PointLight(0xffffcc, 5, 200);
+		light.position.set(4, 30, -20);
+		scene.add(light);
+
+		var light2 = new THREE.AmbientLight(0x20202a, 8, 100);
+		light2.position.set(30, -10, 30);
+		scene.add(light2);
+
+		/* ////////////////////////////////////////////////////////////////////////// */
+		async function run() {
+			try {
+				var loader = new GLTFLoader();
+				loader.crossOrigin = true;
+				loader.load(
+					"JaiaBotRed.glb",
+					function (data) {
+						var object = data.scene;
+						object.position.set(0, 0, 0);
+						object.scale.set(5, 5, 5);
+
+						scene.add(object);
+					}
+				);
+
+				// add texture
+				var texture, material, plane;
+
+				texture = new THREE.TextureLoader().load("bg.png");
+				texture.wrapT = THREE.RepeatWrapping;
+
+				material = new THREE.MeshLambertMaterial({ map: texture });
+				plane = new THREE.Mesh(new THREE.PlaneGeometry(52, 38), material);
+				plane.doubleSided = true;
+				plane.position.z = -3;
+				// plane.rotation.y = Math.PI / 2;
+				plane.rotation.z = 0; // Not sure what this number represents.
+				scene.add(plane);
+
+				// texture.wrapT = THREE.LoopRepeat; // This doesn't seem to work;
+			} catch (e) {
+				console.log(e);
+			}
+		}
+
+		run();
+
 		map.setTarget(this.mapDivId);
 
 		const viewport = document.getElementById(this.mapDivId);
@@ -865,7 +995,7 @@ export default class CentralCommand extends React.Component {
 				this.restoreUndo()
 			}
 		}
-		
+
 		document.onkeydown = KeyPress.bind(this)
 
 		this.state.missionBaseGoal.task = {
@@ -1044,7 +1174,7 @@ export default class CentralCommand extends React.Component {
 		const newRes = map.getView().getResolutionForExtent(geom, size);
 		const optsOverride = {};
 //     if (!firstMove) {
-			optsOverride.maxZoom = origZoom;
+		optsOverride.maxZoom = origZoom;
 //     }
 		map.getView().fit(
 			geom,
@@ -1216,17 +1346,17 @@ export default class CentralCommand extends React.Component {
 				else {
 					this.podStatus = result
 
-                    let messages = result.messages
+					let messages = result.messages
 
-                    if (messages) {
-                        if (messages.info) {
-                            info(messages.info)
-                        }
+					if (messages) {
+						if (messages.info) {
+							info(messages.info)
+						}
 
-                        if (messages.warning) {
-                            warning(messages.warning)
-                        }
-                    }
+						if (messages.warning) {
+							warning(messages.warning)
+						}
+					}
 
 					if (messages?.error) {
 						this.setState({disconnectionMessage: messages.error})
@@ -1399,7 +1529,7 @@ export default class CentralCommand extends React.Component {
 			alert('No Home location selected.  Click on the map to select a Home location and try again.')
 			return
 		}
-		
+
 		let returnToHomeMissions = this.selectedBotIds().map(selectedBotId => Missions.missionWithWaypoints(selectedBotId, this.homeLocation))
 
 		this.runMissions(returnToHomeMissions)
@@ -1619,9 +1749,9 @@ export default class CentralCommand extends React.Component {
 							<FontAwesomeIcon icon={faMapPin} />
 							{trackingTarget.toString()}
 						</button>
-						) : (
-							''
-						)}
+					) : (
+						''
+					)}
 					{botsDrawerOpen ? (
 						<button
 							type="button"
@@ -1659,13 +1789,13 @@ export default class CentralCommand extends React.Component {
 									{BotDetailsComponent(bots?.[this.selectedBotId()], this.api)}
 									<div id="botContextCommandBox">
 										{/* Leader-based commands and manual control go here */}
-											<button
-												type="button"
-												className=""
-												title="Control Bot"
-											>
-												<FontAwesomeIcon icon={faDharmachakra} />
-											</button>
+										<button
+											type="button"
+											className=""
+											title="Control Bot"
+										>
+											<FontAwesomeIcon icon={faDharmachakra} />
+										</button>
 										{trackingTarget === feature.getId() ? (
 											<button
 												type="button"
@@ -1693,6 +1823,7 @@ export default class CentralCommand extends React.Component {
 							: ''}
 
 					</div>
+					<div id="jaiabot3d" style={{"zIndex":"10", "width":"50px", "height":"50px"}}></div>
 				</div>
 
 				{goalSettingsPanel}
@@ -2145,8 +2276,8 @@ export default class CentralCommand extends React.Component {
 			"sample_spacing": this.state.missionParams.spacing,
 			"mission_type": this.state.missionBaseGoal.task,
 			"orientation": this.state.missionParams.orientation,
-			"home_lon": this.homeLocation['lon'], 
-			"home_lat": this.homeLocation['lat'], 
+			"home_lon": this.homeLocation['lon'],
+			"home_lat": this.homeLocation['lat'],
 			"survey_polygon": this.state.surveyPolygonGeoCoords
 		}).then(data => {
 			console.log('got inside')
@@ -2161,40 +2292,37 @@ export default class CentralCommand extends React.Component {
 	commandDrawer() {
 		let element = (
 			<div id="commandsDrawer">
-			<div id="globalCommandBox">
-				<button id= "missionStartStop" type="button" className="globalCommand" title="Run Mission" onClick={this.playClicked.bind(this)}>
-					<Icon path={mdiPlay} title="Run Mission"/>
-				</button>
-				<button type="button" className="globalCommand" id="setHome" title="Set Home" onClick={this.setHomeClicked.bind(this)}>
-					Set<br />Home
-				</button>
-				<button type="button" className="globalCommand" id="goHome" title="Go Home" onClick={this.goHomeClicked.bind(this)}>
-					Go<br />Home
-				</button>
-				<button type="button" className="globalCommand" title="Load Mission" onClick={this.loadMissionButtonClicked.bind(this)}>
-					<Icon path={mdiFolderOpen} title="Load Mission"/>
-				</button>
-				<button type="button" className="globalCommand" title="Save Mission" onClick={this.saveMissionButtonClicked.bind(this)}>
-					<Icon path={mdiContentSave} title="Save Mission"/>
-				</button>
-				<button type="button" className="globalCommand" title="RC Mode" onClick={this.runRCMode.bind(this)}>
-					RC
-				</button>
-				<button type="button" className="globalCommand" title="RC Dive" onClick={this.runRCDive.bind(this)}>
-					Dive
-				</button>
-				{/*<button type="button" className="globalCommand" title="Generator" onClick={this.generateMissions.bind(this)}>*/}
-				{/*	Generator*/}
-				{/*</button>*/}
-				<button type="button" className="globalCommand" title="Flag" onClick={this.sendFlag.bind(this)}>
-					Flag
-				</button>
-				<button type="button" className="globalCommand" title="Clear Mission" onClick={this.deleteClicked.bind(this)}>
-					<Icon path={mdiDelete} title="Clear Mission"/>
-				</button>
-				{ this.undoButton() }
+				<div id="globalCommandBox">
+					<button id= "missionStartStop" type="button" className="globalCommand" title="Run Mission" onClick={this.playClicked.bind(this)}>
+						<Icon path={mdiPlay} title="Run Mission"/>
+					</button>
+					<button type="button" className="globalCommand" id="setHome" title="Set Home" onClick={this.setHomeClicked.bind(this)}>
+						Set<br />Home
+					</button>
+					<button type="button" className="globalCommand" id="goHome" title="Go Home" onClick={this.goHomeClicked.bind(this)}>
+						Go<br />Home
+					</button>
+					<button type="button" className="globalCommand" title="Load Mission" onClick={this.loadMissionButtonClicked.bind(this)}>
+						<Icon path={mdiFolderOpen} title="Load Mission"/>
+					</button>
+					<button type="button" className="globalCommand" title="Save Mission" onClick={this.saveMissionButtonClicked.bind(this)}>
+						<Icon path={mdiContentSave} title="Save Mission"/>
+					</button>
+					<button type="button" className="globalCommand" title="RC Mode" onClick={this.runRCMode.bind(this)}>
+						RC
+					</button>
+					<button type="button" className="globalCommand" title="RC Dive" onClick={this.runRCDive.bind(this)}>
+						Dive
+					</button>
+					<button type="button" className="globalCommand" title="Flag" onClick={this.sendFlag.bind(this)}>
+						Flag
+					</button>
+					<button type="button" className="globalCommand" title="Clear Mission" onClick={this.deleteClicked.bind(this)}>
+						<Icon path={mdiDelete} title="Clear Mission"/>
+					</button>
+					{ this.undoButton() }
+				</div>
 			</div>
-		</div>
 
 		)
 
@@ -2296,23 +2424,23 @@ export default class CentralCommand extends React.Component {
 
 		return (
 			<div id="botsList">
-			{botIds.map((botId) => {
-				let bot = bots[botId]
+				{botIds.map((botId) => {
+					let bot = bots[botId]
 
-				let faultLevel = {
-					'HEALTH__OK': 0,
-					'HEALTH__DEGRADED': 1,
-					'HEALTH__FAILED': 2
-				}[bot.healthState] ?? 0
+					let faultLevel = {
+						'HEALTH__OK': 0,
+						'HEALTH__DEGRADED': 1,
+						'HEALTH__FAILED': 2
+					}[bot.healthState] ?? 0
 
-				let faultLevelClass = 'faultLevel' + faultLevel
-				let selected = this.isBotSelected(botId) ? 'selected' : ''
-				let tracked = botId === this.state.trackingTarget ? ' tracked' : ''
+					let faultLevelClass = 'faultLevel' + faultLevel
+					let selected = this.isBotSelected(botId) ? 'selected' : ''
+					let tracked = botId === this.state.trackingTarget ? ' tracked' : ''
 
-				return (
-					<div
-						key={botId}
-						onClick={
+					return (
+						<div
+							key={botId}
+							onClick={
 								() => {
 									if (this.isBotSelected(botId)) {
 										this.selectBots([])
@@ -2322,11 +2450,11 @@ export default class CentralCommand extends React.Component {
 									}
 								}
 							}
-						className={`bot-item ${faultLevelClass} ${selected} ${tracked}`}
-					>
-						{botId}
-					</div>
-				);
+							className={`bot-item ${faultLevelClass} ${selected} ${tracked}`}
+						>
+							{botId}
+						</div>
+					);
 				})}
 			</div>
 		)
