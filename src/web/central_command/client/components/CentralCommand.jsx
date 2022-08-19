@@ -185,12 +185,11 @@ const POLLING_INTERVAL_MS = 500
 // }
 
 export const idbStore = {
-	db1: openDB("db1", 1),
-	db2: openDB("db2", 1)
+	db1: openDB("db1", 1)
 }
 
 export async function addToStore1(key, value) {
-  (await idbStore.db1).add("store1", value, key);
+  return (await idbStore.db1).add("store1", value, key);
 }
 
 export async function getFromStore1(key) {
@@ -843,7 +842,7 @@ export default class CentralCommand extends React.Component {
 					image.src = url;
 					return;
 				}
-				console.log('key hit');
+				console.log('key hit - getting tile from the cache');
 				const objUrl = URL.createObjectURL(blob);
 				image.onload = function() {
 					URL.revokeObjectURL(objUrl);
@@ -853,12 +852,19 @@ export default class CentralCommand extends React.Component {
 				console.log('key miss catch');
 				image.src = url;
 
-				// addToStore1('urlkey1', 'blob1').then((p) => {
-				// 	console.log('added urlkey1 to store');
-				// 	console.log(p);
-				// }).catch(() => {
-				// 	console.log('urlkey1 already exists');
-				// });
+				// Let's add the tile to the cache since we missed it
+				fetch(url).then(response => {
+					if (response.ok) {
+						response.blob().then(blob => {
+							addToStore1(url, blob).then(p => {
+								console.log('added urlkey1 to store');
+								console.log(p);
+							}).catch(() => {
+								console.log('urlkey1 already exists');
+							});
+						});
+					}
+				});
 			});
 
 
