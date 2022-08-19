@@ -194,11 +194,11 @@ export async function addToStore1(key, value) {
 }
 
 export async function getFromStore1(key) {
-  let blob = (await idbStore.db1).get("store1", key);
+  return (await idbStore.db1).get("store1", key);
 }
 
-export function demo1() {
-  openDB('db1', 1, {
+export async function demo1() {
+  return openDB('db1', 1, {
     upgrade(db) {
       db.createObjectStore('store1');
     },
@@ -890,9 +890,12 @@ export default class CentralCommand extends React.Component {
 	createLayers() {
 		this.missionLayer = new OlVectorLayer()
 
-		demo1();
+		demo1().then(p => {
+			console.log(p);
+			this.cacheTileLoad();
+		});
 
-		this.cacheTileLoad();
+
 
 
 		// getFromStore1('urlkey1').then((p) => {
