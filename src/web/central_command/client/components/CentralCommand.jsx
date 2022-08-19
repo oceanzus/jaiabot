@@ -838,7 +838,7 @@ export default class CentralCommand extends React.Component {
 			getFromStore1(url).then(blob => {
 				console.log(blob);
 				if (!blob) {
-					console.log('key miss');
+					console.log('key miss - no blob');
 					// use online url
 					image.src = url;
 					return;
@@ -850,7 +850,7 @@ export default class CentralCommand extends React.Component {
 				};
 				image.src = objUrl;
 			}).catch(() => {
-				console.log('key miss');
+				console.log('key miss catch');
 				image.src = url;
 
 				// addToStore1('urlkey1', 'blob1').then((p) => {
