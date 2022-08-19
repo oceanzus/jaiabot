@@ -196,6 +196,7 @@ function makeLayerSavable(layer) {
 }
 
 function createIndexedDb() {
+	console.log(idb);
 	idb.open('tileCache', 1, upgradeDb => {
 		if (!upgradeDb.objectStoreNames.contains('tiles')) {
 			upgradeDb.createObjectStore('tiles');
