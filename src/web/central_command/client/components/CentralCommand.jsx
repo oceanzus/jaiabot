@@ -166,40 +166,70 @@ const sidebarMaxWidth = 1500;
 
 const POLLING_INTERVAL_MS = 500
 
-const dbPromise = await openDB('tile-store', 1, {
-  upgrade(db) {
-    db.createObjectStore('tiles');
-  },
-  blocked() {
-    // …
-  },
-  blocking() {
-    // …
-  },
-  terminated() {
-    // …
-  },
-});
+// export async function doDatabaseStuff() {
+// 	const dbPromise = await openDB('tile-store', 1, {
+// 		upgrade(db) {
+// 			db.createObjectStore('tiles');
+// 		},
+// 		blocked() {
+// 			// …
+// 		},
+// 		blocking() {
+// 			// …
+// 		},
+// 		terminated() {
+// 			// …
+// 		},
+// 	});
+// }
 
-export async function get(key) {
-  return (await dbPromise).get('keyval', key);
+export function demo1() {
+  openDB('db1', 1, {
+    upgrade(db) {
+      db.createObjectStore('store1');
+      db.createObjectStore('store2');
+    },
+  });
+  openDB('db2', 1, {
+    upgrade(db) {
+      db.createObjectStore('store3', { keyPath: 'id' });
+      db.createObjectStore('store4', { autoIncrement: true });
+    },
+  });
 }
 
-export async function set(key, val) {
-  return (await dbPromise).put('keyval', val, key);
+export async function demo3() {
+  const db1 = await openDB('db1', 1);
+  db1
+    .add('store1', 'hello again!!', 'new message')
+    .then(result => {
+      console.log('success!', result);
+    })
+    .catch(err => {
+      console.error('error: ', err);
+    });
+  db1.close();
 }
 
-export async function del(key) {
-  return (await dbPromise).delete('keyval', key);
-}
-
-export async function clear() {
-  return (await dbPromise).clear('keyval');
-}
-
-export async function keys() {
-  return (await dbPromise).getAllKeys('keyval');
-}
+// export async function get(key) {
+//   return (await dbPromise).get('keyval', key);
+// }
+//
+// export async function set(key, val) {
+//   return (await dbPromise).put('keyval', val, key);
+// }
+//
+// export async function del(key) {
+//   return (await dbPromise).delete('keyval', key);
+// }
+//
+// export async function clear() {
+//   return (await dbPromise).clear('keyval');
+// }
+//
+// export async function keys() {
+//   return (await dbPromise).getAllKeys('keyval');
+// }
 
 function saveVisibleLayers() {
 	Settings.write("visibleLayers", visibleLayers)
@@ -822,7 +852,13 @@ export default class CentralCommand extends React.Component {
 	createLayers() {
 		this.missionLayer = new OlVectorLayer()
 
-		this.cacheTileLoad();
+		// this.cacheTileLoad();
+		this.demo1();
+		this.demo3().then(p => {
+			console.log();
+		}).catch(() => {
+
+		});
 
 		let layers = [
 			new OlLayerGroup({
