@@ -31,6 +31,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // IndexedDB
 import { openDB, deleteDB, wrap, unwrap } from 'idb';
+import { idb } from 'idb';
 
 // Openlayers
 import OlMap from 'ol/Map';
@@ -182,6 +183,15 @@ const POLLING_INTERVAL_MS = 500
 // 		},
 // 	});
 // }
+
+export const idb = {
+	db1: openDB("db1", 1),
+	db2: openDB("db2", 1)
+}
+
+export async function addToStore1(key, value) {
+  (await idb.db1).add("store1", value, key);
+}
 
 export function demo1() {
   openDB('db1', 1, {
@@ -853,12 +863,18 @@ export default class CentralCommand extends React.Component {
 		this.missionLayer = new OlVectorLayer()
 
 		// this.cacheTileLoad();
-		demo1();
-		demo3().then(p => {
+		addToStore1('test', 'store 1').then(p => {
 			console.log();
 		}).catch(() => {
 
 		});
+
+		// demo1();
+		// demo3().then(p => {
+		// 	console.log();
+		// }).catch(() => {
+		//
+		// });
 
 		let layers = [
 			new OlLayerGroup({
