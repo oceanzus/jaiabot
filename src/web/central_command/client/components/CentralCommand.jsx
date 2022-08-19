@@ -853,8 +853,8 @@ export default class CentralCommand extends React.Component {
 		this.missionLayer = new OlVectorLayer()
 
 		// this.cacheTileLoad();
-		this.demo1();
-		this.demo3().then(p => {
+		demo1();
+		demo3().then(p => {
 			console.log();
 		}).catch(() => {
 
