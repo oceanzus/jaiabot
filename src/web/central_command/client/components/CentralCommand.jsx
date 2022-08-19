@@ -194,7 +194,7 @@ export async function addToStore1(key, value) {
 }
 
 export async function getFromStore1(key) {
-  (await idbStore.db1).get("store1", key);
+  let blob = (await idbStore.db1).get("store1", key);
 }
 
 export function demo1() {
@@ -842,14 +842,15 @@ export default class CentralCommand extends React.Component {
 		this.state.noaaEncSource.setTileLoadFunction(function(tile, url) {
 			const image = tile.getImage();
 
-			getFromStore1(url).then((blob) => {
-				console.log('key hit');
-				console.log(blob);
+			getFromStore1(url).then(blob => {
 				if (!blob) {
+					console.log('key miss');
 					// use online url
 					image.src = url;
 					return;
 				}
+				console.log('key hit');
+				console.log(blob);
 				const objUrl = URL.createObjectURL(blob);
 				image.onload = function() {
 					URL.revokeObjectURL(objUrl);
