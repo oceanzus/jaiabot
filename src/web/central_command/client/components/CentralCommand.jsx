@@ -896,21 +896,21 @@ export default class CentralCommand extends React.Component {
 	createLayers() {
 		this.missionLayer = new OlVectorLayer()
 
-		// this.cacheTileLoad();
+		this.cacheTileLoad();
 
 
-		getFromStore1('urlkey1').then((p) => {
-			console.log('key hit');
-			console.log(p);
-		}).catch(() => {
-			console.log('key miss');
-			addToStore1('urlkey1', 'blob1').then((p) => {
-				console.log('added urlkey1 to store');
-				console.log(p);
-			}).catch(() => {
-				console.log('urlkey1 already exists');
-			});
-		});
+		// getFromStore1('urlkey1').then((p) => {
+		// 	console.log('key hit');
+		// 	console.log(p);
+		// }).catch(() => {
+		// 	console.log('key miss');
+		// 	addToStore1('urlkey1', 'blob1').then((p) => {
+		// 		console.log('added urlkey1 to store');
+		// 		console.log(p);
+		// 	}).catch(() => {
+		// 		console.log('urlkey1 already exists');
+		// 	});
+		// });
 
 		// demo1();
 		// demo3().then(p => {
