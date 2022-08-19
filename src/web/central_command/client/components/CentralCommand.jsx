@@ -193,6 +193,10 @@ export async function addToStore1(key, value) {
   (await idbStore.db1).add("store1", value, key);
 }
 
+export async function getFromStore1(key) {
+  (await idbStore.db1).get("store1", key);
+}
+
 export function demo1() {
   openDB('db1', 1, {
     upgrade(db) {
@@ -863,10 +867,17 @@ export default class CentralCommand extends React.Component {
 		this.missionLayer = new OlVectorLayer()
 
 		// this.cacheTileLoad();
-		addToStore1('test', 'store 1').then(p => {
-			console.log();
+		addToStore1('blob1', 'urlkey1').then(p => {
+			console.log(p);
 		}).catch(() => {
 
+		});
+
+		getFromStore1('urlkey1').then(p => {
+			console.log('key hit');
+			console.log(p);
+		}).catch(() => {
+			console.log('key miss');
 		});
 
 		// demo1();
