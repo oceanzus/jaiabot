@@ -842,7 +842,7 @@ export default class CentralCommand extends React.Component {
 		this.state.noaaEncSource.setTileLoadFunction(function(tile, url) {
 			const image = tile.getImage();
 
-			getFromStore1('urlkey1').then((blob) => {
+			getFromStore1(url).then((blob) => {
 				console.log('key hit');
 				console.log(blob);
 				if (!blob) {
