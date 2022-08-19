@@ -835,9 +835,8 @@ export default class CentralCommand extends React.Component {
 		this.state.noaaEncSource.setTileLoadFunction(function(tile, url) {
 			const image = tile.getImage();
 
-			demo1();
-
 			getFromStore1(url).then(blob => {
+				console.log(blob);
 				if (!blob) {
 					console.log('key miss');
 					// use online url
@@ -845,7 +844,6 @@ export default class CentralCommand extends React.Component {
 					return;
 				}
 				console.log('key hit');
-				console.log(blob);
 				const objUrl = URL.createObjectURL(blob);
 				image.onload = function() {
 					URL.revokeObjectURL(objUrl);
@@ -891,6 +889,8 @@ export default class CentralCommand extends React.Component {
 
 	createLayers() {
 		this.missionLayer = new OlVectorLayer()
+
+		demo1();
 
 		this.cacheTileLoad();
 
