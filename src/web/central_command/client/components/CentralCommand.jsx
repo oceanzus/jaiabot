@@ -185,7 +185,11 @@ const POLLING_INTERVAL_MS = 500
 // }
 
 export const idbStore = {
-	db1: openDB("db1", 1)
+	db1: openDB("db1", 1,  {
+		upgrade(db) {
+			db.createObjectStore('store1');
+		},
+	})
 }
 
 export async function addToStore1(key, value) {
@@ -896,10 +900,11 @@ export default class CentralCommand extends React.Component {
 	createLayers() {
 		this.missionLayer = new OlVectorLayer()
 
-		demo1().then(p => {
-			console.log(p);
-			this.cacheTileLoad();
-		});
+		this.cacheTileLoad();
+		// demo1().then(p => {
+		// 	console.log(p);
+		// 	this.cacheTileLoad();
+		// });
 
 
 
