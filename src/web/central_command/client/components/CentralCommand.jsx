@@ -201,13 +201,6 @@ export function demo1() {
   openDB('db1', 1, {
     upgrade(db) {
       db.createObjectStore('store1');
-      db.createObjectStore('store2');
-    },
-  });
-  openDB('db2', 1, {
-    upgrade(db) {
-      db.createObjectStore('store3', { keyPath: 'id' });
-      db.createObjectStore('store4', { autoIncrement: true });
     },
   });
 }
@@ -841,6 +834,8 @@ export default class CentralCommand extends React.Component {
 	cacheTileLoad() {
 		this.state.noaaEncSource.setTileLoadFunction(function(tile, url) {
 			const image = tile.getImage();
+
+			demo1();
 
 			getFromStore1(url).then(blob => {
 				if (!blob) {
