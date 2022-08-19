@@ -840,11 +840,11 @@ export default class CentralCommand extends React.Component {
 
 	cacheTileLoad() {
 		this.state.noaaEncSource.setTileLoadFunction(function(tile, url) {
-			const tx = db.transaction('tiles', 'readonly');
-			let tiles = tx.objectStore('tiles');
 			const image = tile.getImage();
 
-			tiles.get(url).then(blob => {
+			getFromStore1('urlkey1').then((blob) => {
+				console.log('key hit');
+				console.log(blob);
 				if (!blob) {
 					// use online url
 					image.src = url;
@@ -856,9 +856,39 @@ export default class CentralCommand extends React.Component {
 				};
 				image.src = objUrl;
 			}).catch(() => {
-				// use online url
+				console.log('key miss');
 				image.src = url;
+
+				// addToStore1('urlkey1', 'blob1').then((p) => {
+				// 	console.log('added urlkey1 to store');
+				// 	console.log(p);
+				// }).catch(() => {
+				// 	console.log('urlkey1 already exists');
+				// });
 			});
+
+
+
+
+			// const tx = db.transaction('tiles', 'readonly');
+			// let tiles = tx.objectStore('tiles');
+			// const image = tile.getImage();
+			//
+			// tiles.get(url).then(blob => {
+			// 	if (!blob) {
+			// 		// use online url
+			// 		image.src = url;
+			// 		return;
+			// 	}
+			// 	const objUrl = URL.createObjectURL(blob);
+			// 	image.onload = function() {
+			// 		URL.revokeObjectURL(objUrl);
+			// 	};
+			// 	image.src = objUrl;
+			// }).catch(() => {
+			// 	// use online url
+			// 	image.src = url;
+			// });
 		})
 	}
 
