@@ -867,13 +867,13 @@ export default class CentralCommand extends React.Component {
 		this.missionLayer = new OlVectorLayer()
 
 		// this.cacheTileLoad();
-		addToStore1('urlkey1', 'blob1').then(p => {
+		addToStore1('urlkey1', 'blob1').then((p) => {
 			console.log(p);
 		}).catch(() => {
 
 		});
 
-		getFromStore1('urlkey1').then(p => {
+		getFromStore1('urlkey1').then((p) => {
 			console.log('key hit');
 			console.log(p);
 		}).catch(() => {
