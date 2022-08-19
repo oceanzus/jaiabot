@@ -195,6 +195,17 @@ function makeLayerSavable(layer) {
 	})
 }
 
+function createIndexedDb() {
+	idb.open('tileCache', 1, upgradeDb => {
+		if (!upgradeDb.objectStoreNames.contains('tiles')) {
+			upgradeDb.createObjectStore('tiles');
+		}
+	}).then(db => {
+		let indexedDb = db;
+		return db
+	})
+}
+
 loadVisibleLayers()
 
 // ===========================================================================================================================
@@ -264,7 +275,8 @@ export default class CentralCommand extends React.Component {
 			surveyPolygonGeoCoords: null,
 			surveyPolygonCoords: null,
 			surveyPolygonChanged: false,
-			selectedFeatures: null
+			selectedFeatures: null,
+			noaaEncSource: new TileArcGISRest({ url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/MaritimeChartService/MapServer' })
 		};
 
 		this.missionPlanMarkers = new Map();
@@ -301,7 +313,7 @@ export default class CentralCommand extends React.Component {
 				//type: 'base',
 				opacity: 0.7,
 				zIndex: 20,
-				source: new TileArcGISRest({ url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/MaritimeChartService/MapServer' }),
+				source: this.state.noaaEncSource,
 				wrapX: false
 			}),
 			new OlTileLayer({
@@ -758,8 +770,37 @@ export default class CentralCommand extends React.Component {
 		this.generateMissions(this.state.surveyPolygonGeoCoords);
 	}
 
+	cacheTileLoad() {
+		let db = createIndexedDb();
+		console.log(db);
+		this.state.noaaEncSource.setTileLoadFunction(function(tile, url) {
+			const tx = db.transaction('tiles', 'readonly');
+			let tiles = tx.objectStore('tiles');
+			const image = tile.getImage();
+
+			tiles.get(url).then(blob => {
+				if (!blob) {
+					// use online url
+					image.src = url;
+					return;
+				}
+				const objUrl = URL.createObjectURL(blob);
+				image.onload = function() {
+					URL.revokeObjectURL(objUrl);
+				};
+				image.src = objUrl;
+			}).catch(() => {
+				// use online url
+				image.src = url;
+			});
+		})
+	}
+
+
 	createLayers() {
 		this.missionLayer = new OlVectorLayer()
+
+		this.cacheTileLoad();
 
 		let layers = [
 			new OlLayerGroup({
