@@ -844,6 +844,20 @@ export default class CentralCommand extends React.Component {
 					console.log('key miss - no blob');
 					// use online url
 					image.src = url;
+
+					// Let's add the tile to the cache since we missed it
+					fetch(url).then(response => {
+						if (response.ok) {
+							response.blob().then(blob => {
+								addToStore1(url, blob).then(p => {
+									console.log('added urlkey1 to store');
+									console.log(p);
+								}).catch(() => {
+									console.log('urlkey1 already exists');
+								});
+							});
+						}
+					});
 					return;
 				}
 				console.log('key hit - getting tile from the cache');
