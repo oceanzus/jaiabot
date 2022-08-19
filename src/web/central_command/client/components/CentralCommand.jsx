@@ -184,13 +184,13 @@ const POLLING_INTERVAL_MS = 500
 // 	});
 // }
 
-export const idb = {
+export const idbStore = {
 	db1: openDB("db1", 1),
 	db2: openDB("db2", 1)
 }
 
 export async function addToStore1(key, value) {
-  (await idb.db1).add("store1", value, key);
+  (await idbStore.db1).add("store1", value, key);
 }
 
 export function demo1() {
