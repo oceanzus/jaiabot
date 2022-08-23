@@ -767,9 +767,18 @@ export default class CentralCommand extends React.Component {
 								// 	featureProjection: 'EPSG:3857'
 								// })
 
+								let c = turf.getGeom(missionPlanningLinesTurf)
+								let d = []
+								c.coordinates.forEach(coord => {
+									d.push(format.readFeature(turf.explode(coord, {
+										dataProjection: 'EPSG:4326',
+										featureProjection: 'EPSG:3857'
+									})).getGeometry().getCoordinates())
+								})
+
 								this.setState({
 									missionPlanningLines: b,
-									missionPlanningGrid: turf.explode(missionPlanningLinesTurf).getGeometry()
+									missionPlanningGrid: d
 								})
 							}
 						}
@@ -2123,18 +2132,14 @@ export default class CentralCommand extends React.Component {
 			features.push(mpLineFeatures);
 		}
 
-		if (this.state.mode === 'missionPlanning') {
-			if (this.state.missionPlanningGrid) {
-				let mpGridFeature = new OlFeature(
-					{
-						geometry: new OlMultiPoint(this.state.missionPlanningGrid.getCoordinates())
-					}
-				)
-				mpGridFeature.setStyle(gridStyle);
-				features.push(mpGridFeature);
-			}
-
-
+		if (this.state.missionPlanningGrid) {
+			let mpGridFeature = new OlFeature(
+				{
+					geometry: new OlMultiPoint(this.state.missionPlanningGrid)
+				}
+			)
+			mpGridFeature.setStyle(gridStyle);
+			features.push(mpGridFeature);
 		}
 
 		let vectorSource = new OlVectorSource({
