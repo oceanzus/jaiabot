@@ -705,7 +705,7 @@ export default class CentralCommand extends React.Component {
 					const format = new GeoJSON();
 					const turfPolygon = format.writeFeatureObject(geom1);
 
-					if (turfPolygon.geometry.coordinates[0].length > 50000) {
+					if (turfPolygon.geometry.coordinates[0].length > 5) {
 
 						let cellSide = this.state.missionParams.spacing;
 
@@ -758,6 +758,8 @@ export default class CentralCommand extends React.Component {
 						// tooltipCoord = geom.getLastCoordinate();
 						// $('#surveyPolygonResult').text(CentralCommand.formatLength(geom));
 					}
+
+					this.updateMissionLayer();
 
 					// if (turfPolygon.geometry.coordinates[0].length > 5) {
 					// 	let geo_geom = geom1.getGeometry();
