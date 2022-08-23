@@ -740,6 +740,15 @@ export default class CentralCommand extends React.Component {
 								let offsetLine = turf.lineOffset(centerLine, this.state.missionParams.spacing, {units: 'meters'});
 
 								let missionPlanningLinesTurf = turf.multiLineString([centerLine, offsetLine]);
+								console.log('missionPlanningLinesTurf');
+								console.log(missionPlanningLinesTurf);
+								const missionPlanningLinesOl = format.readFeature(missionPlanningLinesTurf.features[0].geometry, {
+									dataProjection: 'EPSG:4326',
+									featureProjection: 'EPSG:3857'
+								});
+								this.setState({
+									missionPlanningLines: missionPlanningLinesOl.getGeometry()
+								})
 							}
 						}
 
@@ -2079,28 +2088,28 @@ export default class CentralCommand extends React.Component {
 			features.push(surveyPolygonFeature);
 		}
 
-		// if (this.state.mode === 'missionPlanning') {
-		// 	if (this.state.missionPlanningGrid) {
-		// 		let mpGridFeature = new OlFeature(
-		// 			{
-		// 				geometry: new OlMultiPoint(this.state.missionPlanningGrid.getCoordinates())
-		// 			}
-		// 		)
-		// 		mpGridFeature.setStyle(gridStyle);
-		// 		features.push(mpGridFeature);
-		// 		// this.state.missionPlanningGrid.forEach(p => features.push(p));
-		// 	}
-		//
-		// 	if (this.state.missionPlanningLines) {
-		// 		let mpLineFeatures = new OlFeature(
-		// 			{
-		// 				geometry: new OlMultiLineString(this.state.missionPlanningLines.getCoordinates())
-		// 			}
-		// 		)
-		// 		mpLineFeatures.setStyle(surveyPlanLineStyle);
-		// 		features.push(mpLineFeatures);
-		// 	}
-		// }
+		if (this.state.mode === 'missionPlanning') {
+			// if (this.state.missionPlanningGrid) {
+			// 	let mpGridFeature = new OlFeature(
+			// 		{
+			// 			geometry: new OlMultiPoint(this.state.missionPlanningGrid.getCoordinates())
+			// 		}
+			// 	)
+			// 	mpGridFeature.setStyle(gridStyle);
+			// 	features.push(mpGridFeature);
+			// 	// this.state.missionPlanningGrid.forEach(p => features.push(p));
+			// }
+
+			if (this.state.missionPlanningLines) {
+				let mpLineFeatures = new OlFeature(
+					{
+						geometry: new OlMultiLineString(this.state.missionPlanningLines.getCoordinates())
+					}
+				)
+				mpLineFeatures.setStyle(surveyPlanLineStyle);
+				features.push(mpLineFeatures);
+			}
+		}
 
 		let vectorSource = new OlVectorSource({
 			features: features
