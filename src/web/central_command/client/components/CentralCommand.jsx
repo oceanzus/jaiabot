@@ -737,9 +737,16 @@ export default class CentralCommand extends React.Component {
 
 								let centerLine = turf.lineString([missionPlanningGridTurfCentroid.geometry.coordinates, missionRhumbDestPoint.geometry.coordinates]);
 
-								let offsetLine = turf.lineOffset(centerLine, this.state.missionParams.spacing, {units: 'meters'});
+								let offsetLines = [];
+								let ol = turf.lineOffset(centerLine, 0, {units: 'meters'});
+								offsetLines.append(ol)
+								bot_list.forEach(bot => {
+									ol = turf.lineOffset(ol, this.state.missionParams.spacing, {units: 'meters'});
+									offsetLines.append(ol)
+								})
+								// let offsetLine = turf.lineOffset(centerLine, this.state.missionParams.spacing, {units: 'meters'});
 
-								let missionPlanningLinesTurf = turf.multiLineString([centerLine, offsetLine]);
+								let missionPlanningLinesTurf = turf.multiLineString(offsetLines);
 								console.log('missionPlanningLinesTurf');
 								console.log(missionPlanningLinesTurf);
 								console.log(format);
