@@ -744,13 +744,18 @@ export default class CentralCommand extends React.Component {
 								console.log(missionPlanningLinesTurf);
 								console.log(format);
 								console.log(turf);
-								const missionPlanningLinesOl = format.readFeatures(turf.getGeom(missionPlanningLinesTurf), {
-									dataProjection: 'EPSG:4326',
-									featureProjection: 'EPSG:3857'
-								})
+								console.log(OlVectorSource);
+								console.log(OlVectorLayer);
+								let a = turf.getGeom(missionPlanningLinesTurf)
+								let b = []
+								a.coordinates.forEach(coord => { b.push(format.readFeature(coord).getGeometry().getCoordinates()); })
+								// const missionPlanningLinesOl = format.readFeatures(turf.getGeom(missionPlanningLinesTurf), {
+								// 	dataProjection: 'EPSG:4326',
+								// 	featureProjection: 'EPSG:3857'
+								// })
 
 								this.setState({
-									missionPlanningLines: missionPlanningLinesOl.getGeometry()
+									missionPlanningLines: b
 								})
 							}
 						}
@@ -2108,7 +2113,7 @@ export default class CentralCommand extends React.Component {
 			if (this.state.missionPlanningLines) {
 				let mpLineFeatures = new OlFeature(
 					{
-						geometry: new OlMultiLineString(this.state.missionPlanningLines.getCoordinates())
+						geometry: new OlMultiLineString(this.state.missionPlanningLines)
 					}
 				)
 				mpLineFeatures.setStyle(surveyPlanLineStyle);
