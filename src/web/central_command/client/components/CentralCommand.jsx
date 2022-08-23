@@ -742,7 +742,8 @@ export default class CentralCommand extends React.Component {
 								let missionPlanningLinesTurf = turf.multiLineString([centerLine, offsetLine]);
 								console.log('missionPlanningLinesTurf');
 								console.log(missionPlanningLinesTurf);
-								const missionPlanningLinesOl = format.readFeature(missionPlanningLinesTurf.geometry, {
+								console.log(format);
+								const missionPlanningLinesOl = format.readFeatures(missionPlanningLinesTurf, {
 									dataProjection: 'EPSG:4326',
 									featureProjection: 'EPSG:3857'
 								});
