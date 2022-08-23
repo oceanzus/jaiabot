@@ -747,7 +747,7 @@ export default class CentralCommand extends React.Component {
 									dataProjection: 'EPSG:4326',
 									featureProjection: 'EPSG:3857'
 								})
-								)
+
 								this.setState({
 									missionPlanningLines: missionPlanningLinesOl.getGeometry()
 								})
