@@ -2111,6 +2111,17 @@ export default class CentralCommand extends React.Component {
 			features.push(surveyPolygonFeature);
 		}
 
+		if (this.state.missionPlanningLines) {
+			console.log(this.state.missionPlanningLines);
+			let mpLineFeatures = new OlFeature(
+				{
+					geometry: new OlMultiLineString(this.state.missionPlanningLines)
+				}
+			)
+			mpLineFeatures.setStyle(surveyPlanLineStyle);
+			features.push(mpLineFeatures);
+		}
+
 		if (this.state.mode === 'missionPlanning') {
 			// if (this.state.missionPlanningGrid) {
 			// 	let mpGridFeature = new OlFeature(
@@ -2123,16 +2134,7 @@ export default class CentralCommand extends React.Component {
 			// 	// this.state.missionPlanningGrid.forEach(p => features.push(p));
 			// }
 
-			if (this.state.missionPlanningLines) {
-				console.log(this.state.missionPlanningLines);
-				let mpLineFeatures = new OlFeature(
-					{
-						geometry: new OlMultiLineString(this.state.missionPlanningLines)
-					}
-				)
-				mpLineFeatures.setStyle(surveyPlanLineStyle);
-				features.push(mpLineFeatures);
-			}
+
 		}
 
 		let vectorSource = new OlVectorSource({
