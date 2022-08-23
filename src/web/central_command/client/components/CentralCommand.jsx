@@ -739,10 +739,10 @@ export default class CentralCommand extends React.Component {
 
 								let offsetLines = [];
 								let ol = turf.lineOffset(centerLine, 0, {units: 'meters'});
-								offsetLines.append(ol)
+								offsetLines.push(ol)
 								bot_list.forEach(bot => {
 									ol = turf.lineOffset(ol, this.state.missionParams.spacing, {units: 'meters'});
-									offsetLines.append(ol)
+									offsetLines.push(ol)
 								})
 								// let offsetLine = turf.lineOffset(centerLine, this.state.missionParams.spacing, {units: 'meters'});
 
