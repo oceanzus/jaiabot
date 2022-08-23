@@ -770,10 +770,10 @@ export default class CentralCommand extends React.Component {
 								let c = turf.getGeom(missionPlanningLinesTurf)
 								let d = []
 								c.coordinates.forEach(coord => {
-									d.push(format.readFeature(turf.explode(coord, {
+									d.push(format.readFeature(turf.explode(coord).features[0], {
 										dataProjection: 'EPSG:4326',
 										featureProjection: 'EPSG:3857'
-									}).features).getGeometry().getCoordinates())
+									}).getGeometry().getCoordinates())
 								})
 
 								this.setState({
