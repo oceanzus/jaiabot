@@ -773,7 +773,7 @@ export default class CentralCommand extends React.Component {
 									d.push(format.readFeature(turf.explode(coord, {
 										dataProjection: 'EPSG:4326',
 										featureProjection: 'EPSG:3857'
-									})).getGeometry().getCoordinates())
+									}).features).getGeometry().getCoordinates())
 								})
 
 								this.setState({
