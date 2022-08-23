@@ -768,7 +768,8 @@ export default class CentralCommand extends React.Component {
 								// })
 
 								this.setState({
-									missionPlanningLines: b
+									missionPlanningLines: b,
+									missionPlanningGrid: turf.explode(missionPlanningLinesTurf).getGeometry()
 								})
 							}
 						}
@@ -2123,16 +2124,15 @@ export default class CentralCommand extends React.Component {
 		}
 
 		if (this.state.mode === 'missionPlanning') {
-			// if (this.state.missionPlanningGrid) {
-			// 	let mpGridFeature = new OlFeature(
-			// 		{
-			// 			geometry: new OlMultiPoint(this.state.missionPlanningGrid.getCoordinates())
-			// 		}
-			// 	)
-			// 	mpGridFeature.setStyle(gridStyle);
-			// 	features.push(mpGridFeature);
-			// 	// this.state.missionPlanningGrid.forEach(p => features.push(p));
-			// }
+			if (this.state.missionPlanningGrid) {
+				let mpGridFeature = new OlFeature(
+					{
+						geometry: new OlMultiPoint(this.state.missionPlanningGrid.getCoordinates())
+					}
+				)
+				mpGridFeature.setStyle(gridStyle);
+				features.push(mpGridFeature);
+			}
 
 
 		}
