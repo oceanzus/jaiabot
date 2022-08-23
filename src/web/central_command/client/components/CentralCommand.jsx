@@ -744,11 +744,12 @@ export default class CentralCommand extends React.Component {
 								console.log(missionPlanningLinesTurf);
 								console.log(format);
 								console.log(turf);
-								console.log(OlVectorSource);
-								console.log(OlVectorLayer);
+								console.log(OlFeature);
+								console.log(OlMultiLineString);
 								let a = turf.getGeom(missionPlanningLinesTurf)
 								let b = []
 								a.coordinates.forEach(coord => { b.push(format.readFeature(coord).getGeometry().getCoordinates()); })
+								console.log(b);
 								// const missionPlanningLinesOl = format.readFeatures(turf.getGeom(missionPlanningLinesTurf), {
 								// 	dataProjection: 'EPSG:4326',
 								// 	featureProjection: 'EPSG:3857'
@@ -2111,6 +2112,7 @@ export default class CentralCommand extends React.Component {
 			// }
 
 			if (this.state.missionPlanningLines) {
+				console.log(this.state.missionPlanningLines);
 				let mpLineFeatures = new OlFeature(
 					{
 						geometry: new OlMultiLineString(this.state.missionPlanningLines)
