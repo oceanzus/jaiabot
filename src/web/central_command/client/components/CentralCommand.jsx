@@ -748,7 +748,12 @@ export default class CentralCommand extends React.Component {
 								console.log(OlMultiLineString);
 								let a = turf.getGeom(missionPlanningLinesTurf)
 								let b = []
-								a.coordinates.forEach(coord => { b.push(format.readFeature(coord).getGeometry().getCoordinates()); })
+								a.coordinates.forEach(coord => {
+									b.push(format.readFeature(coord, {
+										dataProjection: 'EPSG:4326',
+										featureProjection: 'EPSG:3857'
+									}).getGeometry().getCoordinates());
+								})
 								console.log(b);
 								// const missionPlanningLinesOl = format.readFeatures(turf.getGeom(missionPlanningLinesTurf), {
 								// 	dataProjection: 'EPSG:4326',
