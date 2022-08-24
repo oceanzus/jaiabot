@@ -755,13 +755,22 @@ export default class CentralCommand extends React.Component {
 								console.log('lineSegmentsMl');
 								console.log(lineSegmentsMl);
 
+
+
 								let offsetLines = [];
-								let ol = turf.lineOffset(lineSegmentsMl, 0, {units: 'meters'});
+
+
+
+								let ol = turf.lineOffset(turf.getGeom(lineSegmentsMl), 0, {units: 'meters'});
 								offsetLines.push(ol);
 								bot_list.forEach(bot => {
 									ol = turf.lineOffset(ol, this.state.missionParams.spacing, {units: 'meters'});
 									offsetLines.push(ol);
 								})
+
+
+
+
 								// let offsetLine = turf.lineOffset(centerLine, this.state.missionParams.spacing, {units: 'meters'});
 								console.log('offsetLines');
 								console.log(offsetLines);
