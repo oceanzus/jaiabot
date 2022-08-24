@@ -47,16 +47,19 @@ export class MissionSettingsPanel extends React.Component {
             <div className="MissionSettingsPanel">
                 Mission Settings
                 <div>
-                    Task
-                    <select name="GoalType" id="GoalType" onChange={evt => self.changeTaskType(evt.target.value) } defaultValue={taskType ?? "NONE"}>
-                        <option value="NONE">None</option>
-                        <option value="DIVE">Dive</option>
-                        <option value="SURFACE_DRIFT">Surface Drift</option>
-                        <option value="STATION_KEEP">Station Keep</option>
-                    </select>
+                    Mission Options
                     <div>
                         <table>
                             <tbody>
+                            <tr>
+                                <td>Mission Type</td>
+                                <td>
+                                    <input type="radio" id="polygon-grid" name="mission_type" value="polygon-grid"></input>
+                                    <label htmlFor="polygon-grid">Polygon</label>
+                                    <input type="radio" id="lines" name="mission_type" value="lines"></input>
+                                    <label htmlFor="lines">Lines</label>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>Bot Count</td>
                                 <td><input type="number" className="NumberInput" name="num_bots" defaultValue={this.state.mission_params.num_bots} onChange={this.changeMissionParameter.bind(this)} /> m</td>
@@ -76,6 +79,14 @@ export class MissionSettingsPanel extends React.Component {
                             </tbody>
                         </table>
                     </div>
+
+                    Task
+                    <select name="GoalType" id="GoalType" onChange={evt => self.changeTaskType(evt.target.value) } defaultValue={taskType ?? "NONE"}>
+                        <option value="NONE">None</option>
+                        <option value="DIVE">Dive</option>
+                        <option value="SURFACE_DRIFT">Surface Drift</option>
+                        <option value="STATION_KEEP">Station Keep</option>
+                    </select>
 
                     { taskOptionsPanel }
 
