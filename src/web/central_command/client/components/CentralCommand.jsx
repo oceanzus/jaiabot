@@ -292,7 +292,7 @@ export default class CentralCommand extends React.Component {
 			measureActive: false,
 			goalSettingsPanel: <GoalSettingsPanel />,
 			missionParams: {
-				'num_bots': Object.keys(this.podStatus.bots).length,
+				'num_bots': 4,
 				'num_goals': 12,
 				'spacing': 30,
 				'orientation': 0},
