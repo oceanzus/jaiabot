@@ -291,7 +291,11 @@ export default class CentralCommand extends React.Component {
 			measureFeature: null,
 			measureActive: false,
 			goalSettingsPanel: <GoalSettingsPanel />,
-			missionParams: {'spacing': 30, 'orientation': 0},
+			missionParams: {
+				'num_bots': Object.keys(this.podStatus.bots).length,
+				'num_goals': 12,
+				'spacing': 30,
+				'orientation': 0},
 			missionPlanningGrid: null,
 			missionPlanningLines: null,
 			missionBaseGoal: {},
@@ -760,8 +764,13 @@ export default class CentralCommand extends React.Component {
 								let offsetLines = [];
 
 
+								// let x = turf.getGeom(lineSegmentsMl);
+								// let y = [];
+								// x.coordinates.forEach(coord => {
+								// 	y.push()
+								// })
 
-								let ol = turf.lineOffset(turf.getGeom(lineSegmentsMl), 0, {units: 'meters'});
+								let ol = turf.lineOffset(centerLine, 0, {units: 'meters'});
 								offsetLines.push(ol);
 								bot_list.forEach(bot => {
 									ol = turf.lineOffset(ol, this.state.missionParams.spacing, {units: 'meters'});
@@ -1796,8 +1805,15 @@ export default class CentralCommand extends React.Component {
 		// Add mission generation form to UI if the survey polygon has changed.
 		let missionSettingsPanel = '';
 		if (this.state.mode === 'missionPlanning') {
-			missionSettingsPanel = <MissionSettingsPanel mission_params={this.state.missionParams} goal={this.state.missionBaseGoal} onClose={() => { this.clearMissionPlanningState() }} onMissionApply={() => { this.genMission(this.state.surveyPolygonGeoCoords) }} />
-			// missionSettingsPanel = <MissionSettingsPanel mission_params={this.state.missionParams} onChange={() => {this.generateMissions(this.state.surveyPolygonGeoCoords)}} onClose={() => { this.state.surveyPolygonChanged = false }} />
+			missionSettingsPanel = <MissionSettingsPanel
+				mission_params={this.state.missionParams}
+				goal={this.state.missionBaseGoal}
+				onClose={() => {
+					this.clearMissionPlanningState()
+				}}
+				onMissionApply={() => {
+					this.genMission(this.state.surveyPolygonGeoCoords)
+				}} />
 		}
 
 		// Details box
