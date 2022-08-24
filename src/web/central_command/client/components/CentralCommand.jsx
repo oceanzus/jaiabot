@@ -705,6 +705,9 @@ export default class CentralCommand extends React.Component {
 					const format = new GeoJSON();
 					const turfPolygon = format.writeFeatureObject(geom1);
 
+					console.log(format);
+					console.log(turf);
+
 					if (turfPolygon.geometry.coordinates[0].length > 5) {
 
 						let cellSide = this.state.missionParams.spacing;
@@ -766,8 +769,7 @@ export default class CentralCommand extends React.Component {
 								let missionPlanningLinesTurf = turf.multiLineString(offsetLines);
 								console.log('missionPlanningLinesTurf');
 								console.log(missionPlanningLinesTurf);
-								console.log(format);
-								console.log(turf);
+
 								console.log(OlFeature);
 								console.log(OlMultiLineString);
 								let a = turf.getGeom(missionPlanningLinesTurf)
