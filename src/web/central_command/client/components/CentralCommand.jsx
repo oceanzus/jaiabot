@@ -737,26 +737,31 @@ export default class CentralCommand extends React.Component {
 
 								let centerLine = turf.lineString([missionPlanningGridTurfCentroid.geometry.coordinates, missionRhumbDestPoint.geometry.coordinates]);
 
-								let lineSegments = []
+								let lineSegments = [];
 								let firstDistance = 0;
 								let nextDistance = this.state.missionParams.spacing;
 								bot_list.forEach(bot => {
-									lineSegments.push(turf.lineSliceAlong(centerLine, firstDistance, nextDistance, {units: 'meters'}))
+									let ls = turf.lineSliceAlong(centerLine, firstDistance, nextDistance, {units: 'meters'});
+									lineSegments.push(ls);
 									firstDistance = nextDistance;
 									nextDistance = nextDistance + this.state.missionParams.spacing;
 								})
 
-								let lineSegmentsFc = turf.featureCollection(lineSegments);
-								let lineSegmentsMl = turf.combine(lineSegmentsFc)
+								// let lineSegmentsFc = turf.featureCollection(lineSegments);
+								let lineSegmentsMl = turf.multiLineString(lineSegments)
+								console.log('lineSegmentsMl');
+								console.log(lineSegmentsMl);
 
 								let offsetLines = [];
 								let ol = turf.lineOffset(lineSegmentsMl, 0, {units: 'meters'});
-								offsetLines.push(ol)
+								offsetLines.push(ol);
 								bot_list.forEach(bot => {
 									ol = turf.lineOffset(ol, this.state.missionParams.spacing, {units: 'meters'});
-									offsetLines.push(ol)
+									offsetLines.push(ol);
 								})
 								// let offsetLine = turf.lineOffset(centerLine, this.state.missionParams.spacing, {units: 'meters'});
+								console.log('offsetLines');
+								console.log(offsetLines);
 
 								let missionPlanningLinesTurf = turf.multiLineString(offsetLines);
 								console.log('missionPlanningLinesTurf');
