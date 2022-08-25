@@ -867,6 +867,17 @@ export default class CentralCommand extends React.Component {
 
 				this.setState({mode: 'missionPlanning'});
 
+				const geom1 = evt.feature;
+
+				const format = new GeoJSON();
+				const turfPolygon = format.writeFeatureObject(geom1);
+				let spArea = Math.trunc(turf.area(turf.toWgs84(turfPolygon))*100)/100;
+				let spPerimeter = Math.trunc(turf.length(turf.toWgs84(turfPolygon))*100)/100
+				if (spArea !== undefined && spPerimeter !== undefined) {
+					this.state.missionParams.sp_area = spArea
+					this.state.missionParams.sp_perimeter = spPerimeter;
+				}
+
 				let geo_geom = evt.feature.getGeometry();
 				geo_geom.transform("EPSG:3857", "EPSG:4326")
 				let surveyPolygonGeoCoords = geo_geom.getCoordinates()
