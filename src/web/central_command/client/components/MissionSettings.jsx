@@ -46,16 +46,14 @@ export class MissionSettingsPanel extends React.Component {
 
         return (
             <div className="MissionSettingsPanel">
-                Mission Settings<br/>
+                Mission Settings<hr/>
                 <div>
                     <div>
                         <table>
                             <tbody>
                             <tr>
-                                <td></td>
+                                <td>Mission Edit Mode:</td>
                                 <td>
-                                    <label htmlFor="mission-type">Mission Edit Mode:</label>
-
                                     <select name="mission_type" id="mission-type" defaultValue={missionType ?? "editing"} onChange={this.changeMissionParameter.bind(this)}>
                                         <option value="editing">Editing</option>
                                         <option value="polygon-grid">Polygon</option>
@@ -82,7 +80,7 @@ export class MissionSettingsPanel extends React.Component {
                             </tbody>
                         </table>
                     </div>
-
+                    <hr/>
                     Task
                     <select name="GoalType" id="GoalType" onChange={evt => self.changeTaskType(evt.target.value) } defaultValue={taskType ?? "NONE"}>
                         <option value="NONE">None</option>
@@ -93,14 +91,21 @@ export class MissionSettingsPanel extends React.Component {
 
                     { taskOptionsPanel }
 
+                    <hr/>
                     <div className='HorizontalFlexbox'>
                         <button onClick={this.closeClicked.bind(this)}>Close</button>
                         <button onClick={this.applyMissionClicked.bind(this)}>Apply</button>
                     </div>
 
+                    <hr/>
+                    Survey Stats
                     <div id="surveyPolygonResults">
-                        <div id="surveyPolygonResultArea"></div>
-                        <div id="surveyPolygonResultPerimeter"></div>
+                        <table>
+                            <tbody>
+                            <tr><td><div id="surveyPolygonResultArea"></div></td></tr>
+                            <tr><td><div id="surveyPolygonResultPerimeter"></div></td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
