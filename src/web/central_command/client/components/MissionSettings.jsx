@@ -46,15 +46,15 @@ export class MissionSettingsPanel extends React.Component {
 
         return (
             <div className="MissionSettingsPanel">
-                Mission Settings
+                Mission Settings<br/>
                 <div>
                     <div>
                         <table>
                             <tbody>
                             <tr>
-                                <td>Mission Edit Mode</td>
+                                <td></td>
                                 <td>
-                                    <label htmlFor="mission-type">Mission Type:</label>
+                                    <label htmlFor="mission-type">Mission Edit Mode:</label>
 
                                     <select name="mission_type" id="mission-type" defaultValue={missionType ?? "editing"} onChange={this.changeMissionParameter.bind(this)}>
                                         <option value="editing">Editing</option>
