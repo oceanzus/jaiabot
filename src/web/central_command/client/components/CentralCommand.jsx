@@ -831,8 +831,8 @@ export default class CentralCommand extends React.Component {
 							this.state.missionParams.sp_perimeter = spPerimeter;
 						}
 
-						$('#surveyPolygonResultArea').text(this.state.mission_params.sp_area);
-						$('#surveyPolygonResultPerimeter').text(this.state.mission_params.sp_perimeter);
+						$('#surveyPolygonResultArea').text(this.state.missionParams.sp_area);
+						$('#surveyPolygonResultPerimeter').text(this.state.missionParams.sp_perimeter);
 
 						// tooltipCoord = geom.getLastCoordinate();
 						// $('#surveyPolygonResult').text(CentralCommand.formatLength(geom));
@@ -876,6 +876,9 @@ export default class CentralCommand extends React.Component {
 					surveyPolygonGeoCoords: surveyPolygonGeoCoords,
 					surveyPolygonCoords: geo_geom,
 					surveyPolygonChanged: true})
+
+				$('#surveyPolygonResultArea').text(this.state.missionParams.sp_area);
+				$('#surveyPolygonResultPerimeter').text(this.state.missionParams.sp_perimeter);
 
 				OlUnobserveByKey(surveyPolygonlistener);
 				this.updateMissionLayer();
