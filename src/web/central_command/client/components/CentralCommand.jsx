@@ -824,19 +824,19 @@ export default class CentralCommand extends React.Component {
 							}
 						}
 
-						let spArea = Math.trunc(turf.area(turf.toWgs84(turfPolygon))*100)/100;
-						let spPerimeter = Math.trunc(turf.length(turf.toWgs84(turfPolygon))*100)/100
-						if (spArea !== undefined && spPerimeter !== undefined) {
-							this.state.missionParams.sp_area = spArea
-							this.state.missionParams.sp_perimeter = spPerimeter;
-						}
-
-						$('#surveyPolygonResultArea').text(this.state.missionParams.sp_area);
-						$('#surveyPolygonResultPerimeter').text(this.state.missionParams.sp_perimeter);
-
 						// tooltipCoord = geom.getLastCoordinate();
 						// $('#surveyPolygonResult').text(CentralCommand.formatLength(geom));
 					}
+
+					let spArea = Math.trunc(turf.area(turf.toWgs84(turfPolygon))*100)/100;
+					let spPerimeter = Math.trunc(turf.length(turf.toWgs84(turfPolygon))*100)/100
+					if (spArea !== undefined && spPerimeter !== undefined) {
+						this.state.missionParams.sp_area = spArea
+						this.state.missionParams.sp_perimeter = spPerimeter;
+					}
+
+					$('#surveyPolygonResultArea').text(this.state.missionParams.sp_area);
+					$('#surveyPolygonResultPerimeter').text(this.state.missionParams.sp_perimeter);
 
 					this.updateMissionLayer();
 
