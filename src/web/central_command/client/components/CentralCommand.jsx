@@ -668,6 +668,62 @@ export default class CentralCommand extends React.Component {
 			this
 		);
 
+		let surveyLinesSource = new OlVectorSource({ wrapX: false });
+
+		this.surveyLinesInteraction = new OlDrawInteraction({
+			source: surveyLinesSource,
+			stopClick: true,
+			minPoints: 2,
+			maxPoints: 2,
+			clickTolerance: 10,
+			type: 'LineString',
+			style: new OlStyle({
+				fill: new OlFillStyle({
+					color: 'rgba(255, 255, 255, 0.2)'
+				}),
+				stroke: new OlStrokeStyle({
+					color: 'rgba(0, 0, 0, 0.5)',
+					lineDash: [10, 10],
+					width: 2
+				}),
+				image: new OlCircleStyle({
+					radius: 5,
+					stroke: new OlStrokeStyle({
+						color: 'rgba(0, 0, 0, 0.7)'
+					}),
+					fill: new OlFillStyle({
+						color: 'rgba(255, 255, 255, 0.2)'
+					})
+				})
+			}),
+			finishCondition: event => {
+				return this.surveyLinesInteraction.finishCoordinate_ === this.surveyLinesInteraction.sketchCoords_[0][0];
+			}
+		})
+
+		let surveyLineslistener;
+		this.surveyLinesInteraction.on(
+			'drawstart',
+			(evt) => {
+				console.log('surveyLinesInteraction drawstart');
+				console.log(evt.feature)
+				console.log(this.surveyLinesInteraction.finishCoordinate_);
+				console.log(this.surveyLinesInteraction.sketchCoords_[0][0]);
+			},
+			this
+		);
+
+		this.surveyLinesInteraction.on(
+			'drawend',
+			(evt) => {
+				console.log('surveyLinesInteraction drawend');
+				console.log(evt.feature);
+				console.log(this.surveyLinesInteraction.finishCoordinate_);
+				console.log(this.surveyLinesInteraction.sketchCoords_[0][0]);
+			},
+			this
+		);
+
 		let surveyPolygonSource = new OlVectorSource({ wrapX: false });
 
 		this.surveyPolygonInteraction = new OlDrawInteraction({
@@ -938,6 +994,10 @@ export default class CentralCommand extends React.Component {
 
 	genMission() {
 		this.generateMissions(this.state.surveyPolygonGeoCoords);
+	}
+
+	changeMissionMode() {
+		console.log('changeMissionMode')
 	}
 
 	cacheTileLoad() {
@@ -1836,6 +1896,9 @@ export default class CentralCommand extends React.Component {
 				onClose={() => {
 					this.clearMissionPlanningState()
 				}}
+				onMissionChangeEditMode={() => {
+					this.changeMissionMode()
+				}}
 				onMissionApply={() => {
 					this.genMission(this.state.surveyPolygonGeoCoords)
 				}} />
@@ -1961,7 +2024,13 @@ export default class CentralCommand extends React.Component {
 							className="inactive"
 							onClick={() => {
 								this.setState({ surveyPolygonActive: true, mode: 'missionPlanning' });
-								this.changeInteraction(this.surveyPolygonInteraction, 'crosshair');
+								if (this.state.missionParams.mission_type === 'polygon-grid')
+									this.changeInteraction(this.surveyPolygonInteraction, 'crosshair');
+								if (this.state.missionParams.mission_type === 'editing')
+									this.changeInteraction(this.selectInteraction(), 'grab');
+								if (this.state.missionParams.mission_type === 'lines')
+									this.changeInteraction(this.surveyLinesInteraction, 'crosshair');
+
 								info('Touch map to set first polygon point');
 							}}
 						>

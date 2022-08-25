@@ -19,6 +19,7 @@ export class MissionSettingsPanel extends React.Component {
         this.onClose = props.onClose
         this.onChange = props.onChange
         this.onMissionApply = props.onMissionApply
+        this.onMissionChangeEditMode = props.onMissionChangeEditMode
     }
 
     componentDidUpdate() {
@@ -54,7 +55,7 @@ export class MissionSettingsPanel extends React.Component {
                             <tr>
                                 <td>Mission Edit Mode:</td>
                                 <td>
-                                    <select name="mission_type" id="mission-type" defaultValue={missionType ?? "editing"} onChange={this.changeMissionParameter.bind(this)}>
+                                    <select name="mission_type" id="mission-type" defaultValue={missionType ?? "editing"} onChange={evt => self.changeMissionEditMode(evt.target.value) }>
                                         <option value="editing">Editing</option>
                                         <option value="polygon-grid">Polygon</option>
                                         <option value="lines">Lines</option>
@@ -132,7 +133,7 @@ export class MissionSettingsPanel extends React.Component {
     changeTaskType(taskType) {
         let {goal} = this.state
 
-        if (taskType == goal.task?.type) {
+        if (taskType === goal.task?.type) {
             return
         }
 
@@ -238,6 +239,39 @@ export class MissionSettingsPanel extends React.Component {
 
     applyMissionClicked() {
         this.onMissionApply?.()
+    }
+
+    changeMissionEditMode(missionEditMode) {
+        console.log(missionEditMode);
+        let {mission_params} = this.state;
+
+        if (missionEditMode === mission_params?.mission_type) {
+            return
+        }
+
+        switch(missionEditMode) {
+            case 'polygon-grid':
+                mission_params.mission_type = missionEditMode
+                break;
+            case 'lines':
+                mission_params.mission_type = missionEditMode
+                break;
+            case 'editing':
+                mission_params.mission_type = missionEditMode
+                break;
+            default:
+                mission_params.mission_type = 'editing'
+                break;
+        }
+
+        this.setState({mission_params});
+
+        this.onMissionChangeEditMode?.()
+
+    }
+
+    applyMissionEditMode() {
+        this.onMissionChangeEditMode?.()
     }
 
     applyClicked() {
