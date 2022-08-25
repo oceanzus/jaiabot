@@ -292,7 +292,7 @@ export default class CentralCommand extends React.Component {
 			measureActive: false,
 			goalSettingsPanel: <GoalSettingsPanel />,
 			missionParams: {
-				'mission_type': 'polygon-grid',
+				'mission_type': 'editing',
 				'num_bots': 4,
 				'num_goals': 12,
 				'spacing': 30,
@@ -997,7 +997,13 @@ export default class CentralCommand extends React.Component {
 	}
 
 	changeMissionMode() {
-		console.log('changeMissionMode')
+		console.log('changeMissionMode');
+		if (this.state.missionParams.mission_type === 'polygon-grid')
+			this.changeInteraction(this.surveyPolygonInteraction, 'crosshair');
+		if (this.state.missionParams.mission_type === 'editing')
+			this.changeInteraction(this.selectInteraction(), 'grab');
+		if (this.state.missionParams.mission_type === 'lines')
+			this.changeInteraction(this.surveyLinesInteraction, 'crosshair');
 	}
 
 	cacheTileLoad() {
