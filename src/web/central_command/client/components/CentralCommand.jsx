@@ -708,7 +708,7 @@ export default class CentralCommand extends React.Component {
 			(evt) => {
 				this.updateMissionLayer();
 				console.log('surveyLinesInteraction drawstart');
-				console.log(evt.feature)
+				console.log(evt)
 				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
 				console.log(this.surveyLinesInteraction.sketchCoords_);
@@ -722,9 +722,12 @@ export default class CentralCommand extends React.Component {
 			(evt) => {
 				this.updateMissionLayer();
 				console.log('surveyLinesInteraction drawend');
-				console.log(evt.feature);
-				console.log(this.missionLayer);
-				this.missionLayer.features.push(evt.feature);
+				console.log(evt);
+				console.log(map);
+
+				// this.missionPlanningLayer.setSource(surveyLinesSource)
+				// this.missionPlanningLayer.setZIndex(1000)
+				
 				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
 				console.log(this.surveyLinesInteraction.sketchCoords_);
@@ -1090,7 +1093,8 @@ export default class CentralCommand extends React.Component {
 
 
 	createLayers() {
-		this.missionLayer = new OlVectorLayer()
+		this.missionLayer = new OlVectorLayer();
+		this.missionPlanningLayer = new OlVectorLayer();
 
 		this.cacheTileLoad();
 
@@ -1105,6 +1109,7 @@ export default class CentralCommand extends React.Component {
 			this.clientPositionLayer,
 			this.measureLayer,
 			this.missionLayer,
+			this.missionPlanningLayer,
 			this.botsLayerGroup,
 			this.dragAndDropVectorLayer,
 		]
