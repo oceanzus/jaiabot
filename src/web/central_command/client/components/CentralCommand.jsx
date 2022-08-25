@@ -292,6 +292,7 @@ export default class CentralCommand extends React.Component {
 			measureActive: false,
 			goalSettingsPanel: <GoalSettingsPanel />,
 			missionParams: {
+				'mission_type': 'polygon-grid',
 				'num_bots': 4,
 				'num_goals': 12,
 				'spacing': 30,

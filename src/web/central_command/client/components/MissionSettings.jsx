@@ -30,6 +30,7 @@ export class MissionSettingsPanel extends React.Component {
 
         let taskOptionsPanel
         let taskType = this.state.goal.task?.type
+        let missionType = this.state.mission_params?.mission_type
 
         switch (taskType) {
             case 'DIVE':
@@ -47,26 +48,28 @@ export class MissionSettingsPanel extends React.Component {
             <div className="MissionSettingsPanel">
                 Mission Settings
                 <div>
-                    Mission Options
                     <div>
                         <table>
                             <tbody>
                             <tr>
-                                <td>Mission Type</td>
+                                <td>Mission Edit Mode</td>
                                 <td>
-                                    <input type="radio" id="polygon-grid" name="mission_type" value="polygon-grid"></input>
-                                    <label htmlFor="polygon-grid">Polygon</label>
-                                    <input type="radio" id="lines" name="mission_type" value="lines"></input>
-                                    <label htmlFor="lines">Lines</label>
+                                    <label htmlFor="mission-type">Mission Type:</label>
+
+                                    <select name="mission_type" id="mission-type" defaultValue={missionType ?? "editing"} onChange={this.changeMissionParameter.bind(this)}>
+                                        <option value="editing">Editing</option>
+                                        <option value="polygon-grid">Polygon</option>
+                                        <option value="lines">Lines</option>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Bot Count</td>
-                                <td><input type="number" className="NumberInput" name="num_bots" defaultValue={this.state.mission_params.num_bots} onChange={this.changeMissionParameter.bind(this)} /> m</td>
+                                <td><input type="number" className="NumberInput" name="num_bots" defaultValue={this.state.mission_params.num_bots} onChange={this.changeMissionParameter.bind(this)} /></td>
                             </tr>
                             <tr>
                                 <td>Goals per Bot</td>
-                                <td><input type="number" className="NumberInput" name="num_goals" defaultValue={this.state.mission_params.num_goals} onChange={this.changeMissionParameter.bind(this)} /> m</td>
+                                <td><input type="number" className="NumberInput" name="num_goals" defaultValue={this.state.mission_params.num_goals} onChange={this.changeMissionParameter.bind(this)} /></td>
                             </tr>
                             <tr>
                                 <td>Mission Spacing</td>
