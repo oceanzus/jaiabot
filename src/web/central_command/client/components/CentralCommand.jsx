@@ -706,6 +706,7 @@ export default class CentralCommand extends React.Component {
 		this.surveyLinesInteraction.on(
 			'drawstart',
 			(evt) => {
+				this.updateMissionLayer();
 				console.log('surveyLinesInteraction drawstart');
 				console.log(evt.feature)
 				console.log(this.surveyLinesInteraction);
@@ -726,6 +727,7 @@ export default class CentralCommand extends React.Component {
 				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
 				console.log(this.surveyLinesInteraction.sketchCoords_);
+				this.updateMissionLayer();
 			},
 			this
 		);
