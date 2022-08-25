@@ -826,13 +826,15 @@ export default class CentralCommand extends React.Component {
 
 						let spArea = Math.trunc(turf.area(turf.toWgs84(turfPolygon))*100)/100;
 						let spPerimeter = Math.trunc(turf.length(turf.toWgs84(turfPolygon))*100)/100
-						let {mission_params} = this.state
-						mission_params['sp_area'] = spArea
-						mission_params['sp_perimeter'] = spPerimeter
-						this.setState({mission_params})
-						$('#surveyPolygonResultArea').text(this.state.mission_params.sp_area);
-						$('#surveyPolygonResultPerimeter').text(this.state.mission_params.sp_perimeter);
-
+						if (spArea !== undefined && spPerimeter !== undefined) {
+							let {mission_params} = this.state
+							mission_params['sp_area'] = spArea
+							mission_params['sp_perimeter'] = spPerimeter
+							this.setState({mission_params})
+							$('#surveyPolygonResultArea').text(this.state.mission_params.sp_area);
+							$('#surveyPolygonResultPerimeter').text(this.state.mission_params.sp_perimeter);
+						}
+						
 						// tooltipCoord = geom.getLastCoordinate();
 						// $('#surveyPolygonResult').text(CentralCommand.formatLength(geom));
 					}
