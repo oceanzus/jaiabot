@@ -730,7 +730,7 @@ export default class CentralCommand extends React.Component {
 				console.log(map);
 
 				this.setState({
-					missionPlanningFeature: evt.feature
+					missionPlanningFeature: evt.feature.getGeometry()
 				})
 
 				// this.missionPlanningLayer.setSource(surveyLinesSource)
