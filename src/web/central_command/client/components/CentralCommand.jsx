@@ -670,6 +670,7 @@ export default class CentralCommand extends React.Component {
 
 		let surveyLinesSource = new OlVectorSource({ wrapX: false });
 
+
 		this.surveyLinesInteraction = new OlDrawInteraction({
 			source: surveyLinesSource,
 			stopClick: true,
@@ -719,6 +720,9 @@ export default class CentralCommand extends React.Component {
 			(evt) => {
 				console.log('surveyLinesInteraction drawend');
 				console.log(evt.feature);
+				this.setState({
+					missionPlanningLines: evt.feature
+				})
 				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
 				console.log(this.surveyLinesInteraction.sketchCoords_);
