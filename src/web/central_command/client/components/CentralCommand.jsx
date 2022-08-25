@@ -302,6 +302,7 @@ export default class CentralCommand extends React.Component {
 			},
 			missionPlanningGrid: null,
 			missionPlanningLines: null,
+			missionPlanningFeature: null,
 			missionBaseGoal: {},
 			missionSettingsPanel: <MissionSettingsPanel />,
 			surveyPolygonFeature: null,
@@ -706,6 +707,9 @@ export default class CentralCommand extends React.Component {
 		this.surveyLinesInteraction.on(
 			'drawstart',
 			(evt) => {
+				this.setState({
+					missionPlanningFeature: null
+				})
 				this.updateMissionLayer();
 				console.log('surveyLinesInteraction drawstart');
 				console.log(evt)
@@ -724,6 +728,10 @@ export default class CentralCommand extends React.Component {
 				console.log('surveyLinesInteraction drawend');
 				console.log(evt);
 				console.log(map);
+
+				this.setState({
+					missionPlanningFeature: evt.feature
+				})
 
 				// this.missionPlanningLayer.setSource(surveyLinesSource)
 				// this.missionPlanningLayer.setZIndex(1000)
@@ -2301,6 +2309,14 @@ export default class CentralCommand extends React.Component {
 			)
 			mpGridFeature.setStyle(gridStyle);
 			features.push(mpGridFeature);
+		}
+
+		if (this.state.missionPlanningFeature) {
+			let missionPlanningSource = new OlVectorSource({
+				features: this.state.missionPlanningFeature
+			})
+			this.missionPlanningLayer.setSource(missionPlanningSource);
+			this.missionPlanningLayer.setZIndex(3000);
 		}
 
 		let vectorSource = new OlVectorSource({
