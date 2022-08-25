@@ -296,7 +296,10 @@ export default class CentralCommand extends React.Component {
 				'num_bots': 4,
 				'num_goals': 12,
 				'spacing': 30,
-				'orientation': 0},
+				'orientation': 0,
+				'sp_area': 0,
+				'sp_perimeter': 0
+			},
 			missionPlanningGrid: null,
 			missionPlanningLines: null,
 			missionBaseGoal: {},
@@ -822,9 +825,13 @@ export default class CentralCommand extends React.Component {
 						}
 
 						let spArea = Math.trunc(turf.area(turf.toWgs84(turfPolygon))*100)/100;
-						$('#surveyPolygonResultArea').text(spArea + ' m^2');
 						let spPerimeter = Math.trunc(turf.length(turf.toWgs84(turfPolygon))*100)/100
-						$('#surveyPolygonResultPerimeter').text(spPerimeter + ' km');
+						let {mission_params} = this.state
+						mission_params['sp_area'] = spArea
+						mission_params['sp_perimeter'] = spPerimeter
+						this.setState({mission_params})
+						$('#surveyPolygonResultArea').text(this.state.mission_params.sp_area);
+						$('#surveyPolygonResultPerimeter').text(this.state.mission_params.sp_perimeter);
 
 						// tooltipCoord = geom.getLastCoordinate();
 						// $('#surveyPolygonResult').text(CentralCommand.formatLength(geom));

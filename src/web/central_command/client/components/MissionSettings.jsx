@@ -102,12 +102,12 @@ export class MissionSettingsPanel extends React.Component {
                     <div id="surveyPolygonResults">
                         <table>
                             <tbody>
-                            <tr>
-                                <td>Area: </td>
+                            <tr className="missionStats">
+                                <td>Area (m^2): </td>
                                 <td><div id="surveyPolygonResultArea"></div></td>
                             </tr>
-                            <tr>
-                                <td>Perimeter: </td>
+                            <tr className="missionStats">
+                                <td>Perimeter (km): </td>
                                 <td><div id="surveyPolygonResultPerimeter"></div></td>
                             </tr>
                             </tbody>
