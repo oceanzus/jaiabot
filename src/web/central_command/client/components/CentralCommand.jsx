@@ -727,7 +727,7 @@ export default class CentralCommand extends React.Component {
 
 				// this.missionPlanningLayer.setSource(surveyLinesSource)
 				// this.missionPlanningLayer.setZIndex(1000)
-				
+
 				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
 				console.log(this.surveyLinesInteraction.sketchCoords_);
@@ -1094,7 +1094,10 @@ export default class CentralCommand extends React.Component {
 
 	createLayers() {
 		this.missionLayer = new OlVectorLayer();
-		this.missionPlanningLayer = new OlVectorLayer();
+		this.missionPlanningLayer = new OlVectorLayer({
+			name: 'missionPlanningLayer',
+			title: 'Mission Planning'
+		});
 
 		this.cacheTileLoad();
 
