@@ -697,12 +697,6 @@ export default class CentralCommand extends React.Component {
 			})
 		});
 
-		function toFixed(num, fixed) {
-			fixed = fixed || 0;
-			fixed = Math.pow(10, fixed);
-			return Math.floor(num * fixed) / fixed;
-		}
-
 		let surveyPolygonlistener;
 		this.surveyPolygonInteraction.on(
 			'drawstart',
@@ -827,9 +821,9 @@ export default class CentralCommand extends React.Component {
 							}
 						}
 
-						let spArea = toFixed(turf.area(turf.toWgs84(turfPolygon)), 2);
+						let spArea = Math.trunc(turf.area(turf.toWgs84(turfPolygon))*100)/100;
 						$('#surveyPolygonResultArea').text(spArea + ' m^2');
-						let spPerimeter = toFixed(turf.length(turf.toWgs84(turfPolygon)));
+						let spPerimeter = Math.trunc(turf.length(turf.toWgs84(turfPolygon))*100)/100
 						$('#surveyPolygonResultPerimeter').text(spPerimeter + ' km');
 
 						// tooltipCoord = geom.getLastCoordinate();
