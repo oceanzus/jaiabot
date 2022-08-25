@@ -696,9 +696,9 @@ export default class CentralCommand extends React.Component {
 					})
 				})
 			}),
-			finishCondition: event => {
-				return this.surveyLinesInteraction.finishCoordinate_ === this.surveyLinesInteraction.sketchCoords_[0][0];
-			}
+			// finishCondition: event => {
+			// 	return this.surveyLinesInteraction.finishCoordinate_ === this.surveyLinesInteraction.sketchCoords_[0][0];
+			// }
 		})
 
 		let surveyLineslistener;
