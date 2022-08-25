@@ -707,8 +707,9 @@ export default class CentralCommand extends React.Component {
 			(evt) => {
 				console.log('surveyLinesInteraction drawstart');
 				console.log(evt.feature)
+				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
-				console.log(this.surveyLinesInteraction.sketchCoords_[0][0]);
+				console.log(this.surveyLinesInteraction.sketchCoords_);
 			},
 			this
 		);
@@ -718,8 +719,9 @@ export default class CentralCommand extends React.Component {
 			(evt) => {
 				console.log('surveyLinesInteraction drawend');
 				console.log(evt.feature);
+				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
-				console.log(this.surveyLinesInteraction.sketchCoords_[0][0]);
+				console.log(this.surveyLinesInteraction.sketchCoords_);
 			},
 			this
 		);
