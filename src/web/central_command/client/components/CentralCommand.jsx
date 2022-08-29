@@ -751,9 +751,9 @@ export default class CentralCommand extends React.Component {
 			stopClick: true,
 			minPoints: 3,
 			clickTolerance: 10,
-			finishCondition: event => {
-				return this.surveyPolygonInteraction.finishCoordinate_ === this.surveyPolygonInteraction.sketchCoords_[0][0];
-			},
+			// finishCondition: event => {
+			// 	return this.surveyPolygonInteraction.finishCoordinate_ === this.surveyPolygonInteraction.sketchCoords_[0][0];
+			// },
 			type: 'Polygon',
 			style: new OlStyle({
 				fill: new OlFillStyle({
