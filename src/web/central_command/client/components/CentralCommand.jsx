@@ -730,7 +730,7 @@ export default class CentralCommand extends React.Component {
 				console.log(map);
 
 				this.setState({
-					missionPlanningFeature: evt.feature.getGeometry()
+					missionPlanningFeature: surveyLinesSource
 				})
 
 				// this.missionPlanningLayer.setSource(surveyLinesSource)
@@ -780,7 +780,11 @@ export default class CentralCommand extends React.Component {
 		this.surveyPolygonInteraction.on(
 			'drawstart',
 			(evt) => {
-				this.setState({surveyPolygonChanged: true, mode: 'missionPlanning' });
+				this.setState({
+					surveyPolygonChanged: true,
+					mode: 'missionPlanning',
+					missionPlanningFeature: null
+				});
 				this.updateMissionLayer();
 
 				surveyPolygonlistener = evt.feature.on('change', (evt2) => {
@@ -962,7 +966,9 @@ export default class CentralCommand extends React.Component {
 					surveyPolygonFeature: evt.feature,
 					surveyPolygonGeoCoords: surveyPolygonGeoCoords,
 					surveyPolygonCoords: geo_geom,
-					surveyPolygonChanged: true})
+					surveyPolygonChanged: true,
+					missionPlanningFeature: surveyPolygonSource
+				})
 
 				$('#surveyPolygonResultArea').text(this.state.missionParams.sp_area);
 				$('#surveyPolygonResultPerimeter').text(this.state.missionParams.sp_perimeter);
@@ -2312,10 +2318,11 @@ export default class CentralCommand extends React.Component {
 		}
 
 		if (this.state.missionPlanningFeature) {
-			let missionPlanningSource = new OlVectorSource({
-				features: this.state.missionPlanningFeature
-			})
-			this.missionPlanningLayer.setSource(missionPlanningSource);
+			// console.log(OlVectorSource);
+			// let missionPlanningSource = new OlVectorSource({
+			// 	features: this.state.missionPlanningFeature
+			// })
+			this.missionPlanningLayer.setSource(this.state.missionPlanningFeature);
 			this.missionPlanningLayer.setZIndex(3000);
 		}
 
