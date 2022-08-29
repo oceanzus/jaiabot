@@ -724,17 +724,15 @@ export default class CentralCommand extends React.Component {
 		this.surveyLinesInteraction.on(
 			'drawend',
 			(evt) => {
-				this.updateMissionLayer();
 				console.log('surveyLinesInteraction drawend');
+				this.surveyLinesInteraction.finishDrawing();
+				this.updateMissionLayer();
 				console.log(evt);
 				console.log(map);
 
 				this.setState({
 					missionPlanningFeature: surveyLinesSource
 				})
-
-				// this.missionPlanningLayer.setSource(surveyLinesSource)
-				// this.missionPlanningLayer.setZIndex(1000)
 
 				console.log(this.surveyLinesInteraction);
 				console.log(this.surveyLinesInteraction.finishCoordinate_);
