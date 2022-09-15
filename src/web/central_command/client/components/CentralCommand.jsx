@@ -2279,41 +2279,41 @@ export default class CentralCommand extends React.Component {
 			features.push(homeFeature)
 		}
 
-		if (this.state.surveyPolygonCoords) {
-			let pts = this.state.surveyPolygonCoords.getCoordinates()[0];
-			let transformed_survey_pts = pts.map((pt) => {
-				return equirectangular_to_mercator([pt[0], pt[1]])
-			})
-			let surveyPolygonFeature = new OlFeature(
-				{
-					geometry: new OlLineString(transformed_survey_pts),
-					name: "Survey Bounds"
-				}
-			)
-			surveyPolygonFeature.setStyle(surveyPolygonLineStyle);
-			features.push(surveyPolygonFeature);
-		}
-
-		if (this.state.missionPlanningLines) {
-			console.log(this.state.missionPlanningLines);
-			let mpLineFeatures = new OlFeature(
-				{
-					geometry: new OlMultiLineString(this.state.missionPlanningLines)
-				}
-			)
-			mpLineFeatures.setStyle(surveyPlanLineStyle);
-			features.push(mpLineFeatures);
-		}
-
-		if (this.state.missionPlanningGrid) {
-			let mpGridFeature = new OlFeature(
-				{
-					geometry: new OlMultiPoint(this.state.missionPlanningGrid)
-				}
-			)
-			mpGridFeature.setStyle(gridStyle);
-			features.push(mpGridFeature);
-		}
+		// if (this.state.surveyPolygonCoords) {
+		// 	let pts = this.state.surveyPolygonCoords.getCoordinates()[0];
+		// 	let transformed_survey_pts = pts.map((pt) => {
+		// 		return equirectangular_to_mercator([pt[0], pt[1]])
+		// 	})
+		// 	let surveyPolygonFeature = new OlFeature(
+		// 		{
+		// 			geometry: new OlLineString(transformed_survey_pts),
+		// 			name: "Survey Bounds"
+		// 		}
+		// 	)
+		// 	surveyPolygonFeature.setStyle(surveyPolygonLineStyle);
+		// 	features.push(surveyPolygonFeature);
+		// }
+		//
+		// if (this.state.missionPlanningLines) {
+		// 	console.log(this.state.missionPlanningLines);
+		// 	let mpLineFeatures = new OlFeature(
+		// 		{
+		// 			geometry: new OlMultiLineString(this.state.missionPlanningLines)
+		// 		}
+		// 	)
+		// 	mpLineFeatures.setStyle(surveyPlanLineStyle);
+		// 	features.push(mpLineFeatures);
+		// }
+		//
+		// if (this.state.missionPlanningGrid) {
+		// 	let mpGridFeature = new OlFeature(
+		// 		{
+		// 			geometry: new OlMultiPoint(this.state.missionPlanningGrid)
+		// 		}
+		// 	)
+		// 	mpGridFeature.setStyle(gridStyle);
+		// 	features.push(mpGridFeature);
+		// }
 
 		if (this.state.missionPlanningFeature) {
 			// console.log(OlVectorSource);
