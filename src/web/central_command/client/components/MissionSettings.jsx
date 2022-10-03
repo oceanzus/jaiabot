@@ -13,13 +13,15 @@ export class MissionSettingsPanel extends React.Component {
 
         this.state = {
             goal: props.goal,
-            mission_params: props.mission_params
+            mission_params: props.mission_params,
+            bot_list: props.bot_list
         }
 
         this.onClose = props.onClose
         this.onChange = props.onChange
         this.onMissionApply = props.onMissionApply
         this.onMissionChangeEditMode = props.onMissionChangeEditMode
+        this.onMissionChangeBotList = props.onMissionChangeBotList
     }
 
     componentDidUpdate() {
@@ -45,6 +47,8 @@ export class MissionSettingsPanel extends React.Component {
                 break;
         }
 
+        let botListPanel
+
         return (
             <div className="MissionSettingsPanel">
                 Mission Settings<hr/>
@@ -52,6 +56,17 @@ export class MissionSettingsPanel extends React.Component {
                     <div>
                         <table>
                             <tbody>
+                            <tr hidden>
+                                <td>Bot Selection List:</td>
+                                <td>
+                                    <select multiple name="mission_bot_selection" id="mission-bot-selection" onChange={evt => self.changeMissionBotSelection() }>
+                                        <option value="0">Bot 0</option>
+                                        <option value="1">Bot 1</option>
+                                        <option value="2">Bot 2</option>
+                                        <option value="3">Bot 3</option>
+                                    </select>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>Mission Edit Mode:</td>
                                 <td>
@@ -76,7 +91,11 @@ export class MissionSettingsPanel extends React.Component {
                             </tr>
                             <tr>
                                 <td>Mission Orientation</td>
-                                <td><input type="number" className="NumberInput" name="orientation" defaultValue={this.state.mission_params.orientation} onChange={this.changeMissionParameter.bind(this)} /> deg</td>
+                                <td><input id='missionOrientation' type="number" className="NumberInput" name="orientation" defaultValue={this.state.mission_params.orientation} /> deg</td>
+                            </tr>
+                            <tr hidden>
+                                <td>Use Max Line Length</td>
+                                <td><input type="checkbox" className="RadioInput" name="use_max_length" defaultValue={this.state.mission_params.use_max_length} onChange={this.changeMissionParameter.bind(this)} /></td>
                             </tr>
                             </tbody>
                         </table>
@@ -104,7 +123,7 @@ export class MissionSettingsPanel extends React.Component {
                         <table>
                             <tbody>
                             <tr className="missionStats">
-                                <td>Area (m^2): </td>
+                                <td>Area (km^2): </td>
                                 <td><div id="surveyPolygonResultArea"></div></td>
                             </tr>
                             <tr className="missionStats">
@@ -241,8 +260,19 @@ export class MissionSettingsPanel extends React.Component {
         this.onMissionApply?.()
     }
 
+    changeMissionBotSelection() {
+        const selected = document.querySelectorAll('#mission-bot-selection option:checked');
+        const missionBots = Array.from(selected).map(el => el.value);
+        // let missionBots = document.getElementById('mission-bot-selection').val();
+        // console.log(missionBots);
+        let {mission_params} = this.state;
+        mission_params.selected_bots = missionBots;
+        this.setState({mission_params});
+        this.onMissionChangeBotList?.()
+    }
+
     changeMissionEditMode(missionEditMode) {
-        console.log(missionEditMode);
+        // console.log(missionEditMode);
         let {mission_params} = this.state;
 
         if (missionEditMode === mission_params?.mission_type) {
